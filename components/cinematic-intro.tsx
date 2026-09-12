@@ -92,10 +92,11 @@ export function CinematicIntro({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const volumeRafRef = useRef(0);
   const mutedRef = useRef(false);
-  const autoplayBlockedRef = useRef(false);
+  const audioUnlockedRef = useRef(false);
+  const introStartedAtRef = useRef(0);
 
   const [musicMuted, setMusicMuted] = useState(false);
-  const [awaitingGesture, setAwaitingGesture] = useState(false);
+  const [awaitingGesture, setAwaitingGesture] = useState(true);
   mutedRef.current = musicMuted;
 
   const [play, setPlay] = useState(true);
@@ -123,47 +124,48 @@ export function CinematicIntro({
     onDoneRef.current();
   }, [stopAudio]);
 
-  const seekIntroStart = (el: HTMLAudioElement) => {
-    const trim = AUDIO_TRIM_START_S;
-    if (Number.isFinite(el.duration) && el.duration > trim + 0.35) {
+  const seekToIntroElapsed = (el: HTMLAudioElement) => {
+    const elapsedSec = Math.max(
+      0,
+      (performance.now() - introStartedAtRef.current) / 1000,
+    );
+    const startAt = AUDIO_TRIM_START_S + elapsedSec;
+    if (Number.isFinite(el.duration) && el.duration > startAt + 0.15) {
       try {
-        el.currentTime = trim;
+        el.currentTime = startAt;
       } catch {
         /* ignore */
       }
     }
   };
 
-  const tryStartSfx = useCallback(() => {
-    const el = audioRef.current;
-    if (!el || doneRef.current) return;
-
-    const start = () => {
-      if (!el || doneRef.current) return;
-      seekIntroStart(el);
-      el.loop = false;
-      el.muted = mutedRef.current;
-      el.volume = SFX_BASE_VOLUME;
-      const playAttempt = el.play();
-      if (playAttempt !== undefined) {
-        playAttempt.catch(() => {
-          if (doneRef.current || mutedRef.current) return;
-          // Browsers block audible autoplay. Keep the timeline running muted
-          // and unlock on the first pointer/key — do not flip the Mute button.
-          autoplayBlockedRef.current = true;
-          el.muted = true;
-          el.volume = SFX_BASE_VOLUME;
-          setAwaitingGesture(true);
-          void el.play().catch(() => {});
-        });
-      }
-    };
-
-    if (el.readyState >= 1) {
-      start();
-    } else {
-      el.addEventListener("loadedmetadata", start, { once: true });
+  const unlockAudio = useCallback(() => {
+    if (doneRef.current || mutedRef.current || audioUnlockedRef.current) {
+      return;
     }
+    const el = audioRef.current;
+    if (!el) return;
+
+    // Mark unlocked first so a late muted-autoplay reject cannot remute us.
+    audioUnlockedRef.current = true;
+    setAwaitingGesture(false);
+
+    // iOS: unmuting an already-playing element is not enough — pause, then
+    // play() unmuted inside this same user gesture.
+    try {
+      el.pause();
+    } catch {
+      /* ignore */
+    }
+    el.muted = false;
+    el.loop = false;
+    el.volume = SFX_BASE_VOLUME;
+    seekToIntroElapsed(el);
+    void el.play().catch(() => {
+      if (doneRef.current || mutedRef.current) return;
+      audioUnlockedRef.current = false;
+      setAwaitingGesture(true);
+    });
   }, []);
 
   useLayoutEffect(() => {
@@ -186,23 +188,22 @@ export function CinematicIntro({
 
   useEffect(() => {
     if (!play) return;
-    const unlock = () => {
-      if (doneRef.current || mutedRef.current) return;
-      const el = audioRef.current;
-      if (!el) return;
-      autoplayBlockedRef.current = false;
-      setAwaitingGesture(false);
-      el.muted = false;
-      el.volume = SFX_BASE_VOLUME;
-      void el.play().catch(() => {});
+    const unlock = (e: Event) => {
+      const target = e.target as HTMLElement | null;
+      if (target?.closest("[data-intro-control]")) return;
+      unlockAudio();
     };
-    window.addEventListener("pointerdown", unlock);
-    window.addEventListener("keydown", unlock);
+    // Capture so the first tap wins even if a child stops bubbling.
+    // touchstart covers older mobile browsers that delay or skip pointerdown.
+    window.addEventListener("pointerdown", unlock, { capture: true });
+    window.addEventListener("touchstart", unlock, { capture: true });
+    window.addEventListener("keydown", unlock, { capture: true });
     return () => {
-      window.removeEventListener("pointerdown", unlock);
-      window.removeEventListener("keydown", unlock);
+      window.removeEventListener("pointerdown", unlock, { capture: true });
+      window.removeEventListener("touchstart", unlock, { capture: true });
+      window.removeEventListener("keydown", unlock, { capture: true });
     };
-  }, [play]);
+  }, [play, unlockAudio]);
 
   useEffect(() => {
     if (!play) return;
@@ -239,28 +240,45 @@ export function CinematicIntro({
 
   useEffect(() => {
     if (!play) return;
-    const a = audioRef.current;
-    if (a) {
-      a.loop = false;
+    introStartedAtRef.current = performance.now();
+
+    const el = audioRef.current;
+    if (el) {
+      el.loop = false;
+      el.muted = true;
+      el.volume = SFX_BASE_VOLUME;
+      // Buffer muted so the first tap can start audible playback immediately.
+      const warm = () => {
+        if (!el || doneRef.current || audioUnlockedRef.current) return;
+        const trim = AUDIO_TRIM_START_S;
+        if (Number.isFinite(el.duration) && el.duration > trim + 0.35) {
+          try {
+            el.currentTime = trim;
+          } catch {
+            /* ignore */
+          }
+        }
+        void el.play().catch(() => {});
+      };
+      if (el.readyState >= 1) {
+        warm();
+      } else {
+        el.addEventListener("loadedmetadata", warm, { once: true });
+      }
     }
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(tryStartSfx);
-    });
-
-    const introT0 = performance.now();
     const tick = () => {
       if (doneRef.current) return;
-      const el = audioRef.current;
-      if (el) {
-        const elapsed = performance.now() - introT0;
+      const audio = audioRef.current;
+      if (audio) {
+        const elapsed = performance.now() - introStartedAtRef.current;
         const fadeStart = INTRO_TOTAL_MS - FADE_OUT_MS;
         const fadeMul =
           elapsed >= fadeStart
             ? Math.max(0, 1 - (elapsed - fadeStart) / FADE_OUT_MS)
             : 1;
-        el.volume = SFX_BASE_VOLUME * fadeMul;
-        el.muted = mutedRef.current || autoplayBlockedRef.current;
+        audio.volume = SFX_BASE_VOLUME * fadeMul;
+        audio.muted = mutedRef.current || !audioUnlockedRef.current;
       }
       volumeRafRef.current = requestAnimationFrame(tick);
     };
@@ -269,7 +287,7 @@ export function CinematicIntro({
     return () => {
       cancelAnimationFrame(volumeRafRef.current);
     };
-  }, [play, tryStartSfx]);
+  }, [play]);
 
   useEffect(() => {
     if (!play) return;
@@ -380,21 +398,21 @@ export function CinematicIntro({
   }, [play, phase, finish]);
 
   const toggleMusicMuted = () => {
-    setMusicMuted((m) => {
-      const next = !m;
-      mutedRef.current = next;
-      const el = audioRef.current;
-      if (el) {
-        el.muted = next;
-        el.volume = SFX_BASE_VOLUME;
-        if (!next) {
-          void el.play().catch(() => {});
-        } else {
-          el.pause();
-        }
-      }
-      return next;
-    });
+    const next = !mutedRef.current;
+    mutedRef.current = next;
+    setMusicMuted(next);
+    const el = audioRef.current;
+    if (!el) return;
+    el.muted = next;
+    el.volume = SFX_BASE_VOLUME;
+    if (!next) {
+      audioUnlockedRef.current = true;
+      setAwaitingGesture(false);
+      seekToIntroElapsed(el);
+      void el.play().catch(() => {});
+    } else {
+      el.pause();
+    }
   };
 
   if (!play || phase === "done") {
@@ -458,26 +476,30 @@ export function CinematicIntro({
       </p>
       {awaitingGesture ? (
         <p className="pointer-events-none absolute inset-x-0 top-[52%] z-10 px-6 text-center font-[family-name:var(--font-mono)] text-xs tracking-wide text-[var(--text-muted)]">
-          Click anywhere for sound
+          Tap anywhere for sound
         </p>
       ) : null}
 
       <div className="relative z-20 mt-auto flex flex-wrap items-end justify-end gap-3 p-4">
         <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center sm:gap-4">
+          {!awaitingGesture ? (
+            <button
+              type="button"
+              data-intro-control
+              className="min-h-[44px] rounded border border-[var(--card-border)] bg-black/60 px-3 py-2 font-[family-name:var(--font-mono)] text-xs text-[var(--crawl-blue)] backdrop-blur-sm hover:border-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)] sm:text-sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMusicMuted();
+              }}
+              aria-pressed={musicMuted}
+              aria-label={musicMuted ? "Unmute intro sound" : "Mute intro sound"}
+            >
+              {musicMuted ? "Unmute" : "Mute"}
+            </button>
+          ) : null}
           <button
             type="button"
-            className="min-h-[44px] rounded border border-[var(--card-border)] bg-black/60 px-3 py-2 font-[family-name:var(--font-mono)] text-xs text-[var(--crawl-blue)] backdrop-blur-sm hover:border-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)] sm:text-sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleMusicMuted();
-            }}
-            aria-pressed={musicMuted}
-            aria-label={musicMuted ? "Unmute intro sound" : "Mute intro sound"}
-          >
-            {musicMuted ? "Unmute" : "Mute"}
-          </button>
-          <button
-            type="button"
+            data-intro-control
             className="min-h-[44px] min-w-[44px] rounded border border-[var(--card-border)] bg-black/60 px-4 py-2 font-[family-name:var(--font-mono)] text-sm text-[var(--crawl-blue)] backdrop-blur-sm hover:border-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
             onClick={(e) => {
               e.stopPropagation();
