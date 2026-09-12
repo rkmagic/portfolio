@@ -3,19 +3,152 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --star-yellow: #f5c518;
+  --crawl-blue: #4bd5ee;
+  --bg-deep: #000000;
+  --text-primary: #e8e6e3;
+  --text-muted: #8a8a8a;
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-hover: rgba(255, 255, 255, 0.08);
+  --background: var(--bg-deep);
+  --foreground: var(--text-primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply min-h-screen bg-[var(--bg-deep)] text-[var(--text-primary)] antialiased;
+    font-family: var(--font-outfit), system-ui, sans-serif;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* MDX article links — covers Markdown links and raw <a> tags */
+.prose-portfolio a {
+  color: var(--star-yellow);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--star-yellow) 50%, transparent);
+  text-underline-offset: 4px;
+}
+
+.prose-portfolio a:hover {
+  text-decoration-color: var(--star-yellow);
+}
+
+@keyframes warp-flash {
+  0% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.25;
+  }
+}
+
+.motion-safe\:animate-warp-flash {
+  animation: warp-flash 400ms ease-out forwards;
+}
+
+@keyframes intro-caption {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.motion-safe\:animate-intro-caption {
+  animation: intro-caption 700ms ease-out 180ms forwards;
+  opacity: 0;
+}
+
+@keyframes droid-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes droid-antenna {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+@keyframes droid-eye {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.motion-safe\:animate-droid-bob {
+  animation: droid-bob 3.6s ease-in-out infinite;
+}
+
+.motion-safe\:animate-droid-antenna {
+  animation: droid-antenna 2.8s ease-in-out infinite;
+}
+
+.motion-safe\:animate-droid-eye {
+  animation: droid-eye 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe\:animate-warp-flash,
+  .motion-safe\:animate-intro-caption,
+  .motion-safe\:animate-droid-bob,
+  .motion-safe\:animate-droid-antenna,
+  .motion-safe\:animate-droid-eye {
+    animation: none !important;
+  }
+
+  .motion-safe\:animate-intro-caption {
+    opacity: 1;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
 }

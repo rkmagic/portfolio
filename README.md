@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rishi — Product Manager Portfolio
 
-## Getting Started
+Personal portfolio site: product teardowns, shipped projects, and writings. Built with Next.js and MDX.
 
-First, run the development server:
+**Live:** connect this repo to [Vercel](https://vercel.com) after the first GitHub push.
+
+## Local development
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Dev server (Turbopack) |
+| `npm run build` | Production build |
+| `npm start` | Serve the production build |
+| `npm run lint` | ESLint |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` to override contact links or the site URL. `.env.local` is gitignored.
 
-## Learn More
+## Content
 
-To learn more about Next.js, take a look at the following resources:
+MDX lives under `content/`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `content/teardowns/` → `/teardowns/[slug]`
+- `content/projects/` → `/projects/[slug]`
+- `content/writings/` → `/writings/[slug]`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+PDFs for writing decks go in `public/pdfs/`. Intro audio is in `public/audio/`.
 
-## Deploy on Vercel
+## Deploy to GitHub + Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This is an App Router Next.js app (server-rendered MDX). Host it on Vercel from GitHub — GitHub Pages is not a fit without a static export.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Push this repo to GitHub (public or private).
+2. At [vercel.com/new](https://vercel.com/new), import the repo. Framework preset: **Next.js**.
+3. Add env vars from `.env.example`. After the first deploy, set `NEXT_PUBLIC_SITE_URL` to the production URL (for example `https://your-project.vercel.app`) and redeploy so sitemap, robots, and Open Graph URLs are correct.
+4. Optional: attach a custom domain in the Vercel project settings.
+
+If `NEXT_PUBLIC_SITE_URL` is unset, the app falls back to Vercel’s project URL at build time.
