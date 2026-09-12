@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Outfit, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { EmailContactProvider } from "@/components/email-contact-provider";
@@ -63,6 +64,7 @@ export default function RootLayout({
           </main>
           <SiteFooter />
         </EmailContactProvider>
+        <Analytics />
       </body>
     </html>
   );
