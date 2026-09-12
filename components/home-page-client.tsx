@@ -1,16 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useCallback, useEffect, useState } from "react";
-import { INTRO_REPLAY_EVENT } from "@/components/cinematic-intro";
-
-const CinematicIntro = dynamic(
-  () =>
-    import("@/components/cinematic-intro").then((m) => ({
-      default: m.CinematicIntro,
-    })),
-  { ssr: false },
-);
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import {
+  CinematicIntro,
+  INTRO_REPLAY_EVENT,
+  INTRO_SESSION_KEY,
+} from "@/components/cinematic-intro";
 
 export function HomePageClient({
   children,
@@ -32,15 +27,44 @@ export function HomePageClient({
     setIntroKey((k) => k + 1);
   }, []);
 
-  useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("replayIntro") === "1") {
+  useLayoutEffect(() => {
+    const replayQuery =
+      new URLSearchParams(window.location.search).get("replayIntro") === "1";
+    if (replayQuery) {
       window.history.replaceState({}, "", "/");
+      setForcePlay(true);
+      setIntroDone(false);
+      return;
     }
 
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem(INTRO_SESSION_KEY) === "1";
+    } catch {
+      /* ignore */
+    }
+    if (reduced || seen) {
+      setIntroDone(true);
+    }
+  }, []);
+
+  useEffect(() => {
     const onReplay = () => replayIntro();
     window.addEventListener(INTRO_REPLAY_EVENT, onReplay);
     return () => window.removeEventListener(INTRO_REPLAY_EVENT, onReplay);
   }, [replayIntro]);
+
+  useLayoutEffect(() => {
+    if (introDone) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [introDone]);
 
   useEffect(() => {
     if (introDone) return;
@@ -62,16 +86,22 @@ export function HomePageClient({
   return (
     <>
       {!introDone ? (
-        <CinematicIntro
-          key={introKey}
-          forcePlay={forcePlay}
-          onDone={handleDone}
-        />
+        <>
+          <style>{`header, footer { visibility: hidden !important; }`}</style>
+          <div className="fixed inset-0 z-[55] bg-black" aria-hidden />
+          <CinematicIntro
+            key={introKey}
+            forcePlay={forcePlay}
+            onDone={handleDone}
+          />
+        </>
       ) : null}
       <div
         id="home-inner"
         aria-hidden={!introDone}
-        className={introDone ? "" : "pointer-events-none select-none"}
+        className={
+          introDone ? "" : "invisible pointer-events-none select-none"
+        }
       >
         {children}
       </div>

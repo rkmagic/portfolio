@@ -92,11 +92,13 @@ export function CinematicIntro({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const volumeRafRef = useRef(0);
   const mutedRef = useRef(false);
+  const autoplayBlockedRef = useRef(false);
 
   const [musicMuted, setMusicMuted] = useState(false);
+  const [awaitingGesture, setAwaitingGesture] = useState(false);
   mutedRef.current = musicMuted;
 
-  const [play, setPlay] = useState(false);
+  const [play, setPlay] = useState(true);
   const [phase, setPhase] = useState<Phase>("settle");
 
   const stopAudio = useCallback(() => {
@@ -121,25 +123,38 @@ export function CinematicIntro({
     onDoneRef.current();
   }, [stopAudio]);
 
+  const seekIntroStart = (el: HTMLAudioElement) => {
+    const trim = AUDIO_TRIM_START_S;
+    if (Number.isFinite(el.duration) && el.duration > trim + 0.35) {
+      try {
+        el.currentTime = trim;
+      } catch {
+        /* ignore */
+      }
+    }
+  };
+
   const tryStartSfx = useCallback(() => {
     const el = audioRef.current;
     if (!el || doneRef.current) return;
 
     const start = () => {
       if (!el || doneRef.current) return;
-      try {
-        el.currentTime = AUDIO_TRIM_START_S;
-      } catch {
-        /* ignore */
-      }
+      seekIntroStart(el);
+      el.loop = false;
       el.muted = mutedRef.current;
       el.volume = SFX_BASE_VOLUME;
-      const p = el.play();
-      if (p !== undefined) {
-        p.catch(() => {
-          if (!mutedRef.current) {
-            setMusicMuted(true);
-          }
+      const playAttempt = el.play();
+      if (playAttempt !== undefined) {
+        playAttempt.catch(() => {
+          if (doneRef.current || mutedRef.current) return;
+          // Browsers block audible autoplay. Keep the timeline running muted
+          // and unlock on the first pointer/key — do not flip the Mute button.
+          autoplayBlockedRef.current = true;
+          el.muted = true;
+          el.volume = SFX_BASE_VOLUME;
+          setAwaitingGesture(true);
+          void el.play().catch(() => {});
         });
       }
     };
@@ -168,6 +183,26 @@ export function CinematicIntro({
     }
     setPlay(true);
   }, [finish, forcePlay]);
+
+  useEffect(() => {
+    if (!play) return;
+    const unlock = () => {
+      if (doneRef.current || mutedRef.current) return;
+      const el = audioRef.current;
+      if (!el) return;
+      autoplayBlockedRef.current = false;
+      setAwaitingGesture(false);
+      el.muted = false;
+      el.volume = SFX_BASE_VOLUME;
+      void el.play().catch(() => {});
+    };
+    window.addEventListener("pointerdown", unlock);
+    window.addEventListener("keydown", unlock);
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, [play]);
 
   useEffect(() => {
     if (!play) return;
@@ -225,7 +260,7 @@ export function CinematicIntro({
             ? Math.max(0, 1 - (elapsed - fadeStart) / FADE_OUT_MS)
             : 1;
         el.volume = SFX_BASE_VOLUME * fadeMul;
-        el.muted = mutedRef.current;
+        el.muted = mutedRef.current || autoplayBlockedRef.current;
       }
       volumeRafRef.current = requestAnimationFrame(tick);
     };
@@ -347,16 +382,17 @@ export function CinematicIntro({
   const toggleMusicMuted = () => {
     setMusicMuted((m) => {
       const next = !m;
-      queueMicrotask(() => {
-        const el = audioRef.current;
-        if (el) {
-          el.muted = next;
-          el.volume = SFX_BASE_VOLUME;
-          if (!next) {
-            void el.play();
-          }
+      mutedRef.current = next;
+      const el = audioRef.current;
+      if (el) {
+        el.muted = next;
+        el.volume = SFX_BASE_VOLUME;
+        if (!next) {
+          void el.play().catch(() => {});
+        } else {
+          el.pause();
         }
-      });
+      }
       return next;
     });
   };
@@ -382,6 +418,7 @@ export function CinematicIntro({
         ref={audioRef}
         src={INTRO_SFX_SRC}
         preload="auto"
+        playsInline
         aria-hidden
       />
 
@@ -419,6 +456,11 @@ export function CinematicIntro({
       >
         Accelerating to Planet Rishi..
       </p>
+      {awaitingGesture ? (
+        <p className="pointer-events-none absolute inset-x-0 top-[52%] z-10 px-6 text-center font-[family-name:var(--font-mono)] text-xs tracking-wide text-[var(--text-muted)]">
+          Click anywhere for sound
+        </p>
+      ) : null}
 
       <div className="relative z-20 mt-auto flex flex-wrap items-end justify-end gap-3 p-4">
         <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center sm:gap-4">
