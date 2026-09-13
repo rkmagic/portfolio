@@ -62,14 +62,14 @@ export function SiteHeader() {
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <Link
             href="/"
-            className="shrink-0 font-[family-name:var(--font-mono)] text-sm font-bold tracking-wide text-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
+            className="shrink-0 font-[family-name:var(--font-mono)] text-base font-bold tracking-wide text-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)] md:text-sm"
           >
             {site.name}
           </Link>
           <button
             type="button"
             onClick={seeOnboardingAgain}
-            className="min-h-[44px] rounded px-1.5 py-1 font-[family-name:var(--font-mono)] text-[10px] leading-tight text-[var(--text-muted)] transition-colors hover:text-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)] sm:text-xs"
+            className="min-h-[44px] rounded px-1.5 py-1 font-[family-name:var(--font-mono)] text-sm leading-tight text-[var(--text-muted)] transition-colors hover:text-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)] md:text-xs"
           >
             See onboarding again
           </button>

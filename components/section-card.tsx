@@ -6,12 +6,14 @@ export function SectionCard({
   title,
   oneLiner,
   href,
+  badge,
   children,
 }: {
   sectionNumber: string;
   title: string;
   oneLiner: string;
   href: string;
+  badge?: string;
   children?: ReactNode;
 }) {
   return (
@@ -24,9 +26,16 @@ export function SectionCard({
         href={href}
         className="block rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
       >
-        <p className="font-[family-name:var(--font-mono)] text-xs font-medium uppercase tracking-wider text-[var(--crawl-blue)]">
-          Section {sectionNumber}
-        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="font-[family-name:var(--font-mono)] text-xs font-medium uppercase tracking-wider text-[var(--crawl-blue)]">
+            Section {sectionNumber}
+          </p>
+          {badge ? (
+            <span className="rounded border border-[var(--card-border)] px-2 py-0.5 font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-wide text-[var(--star-yellow)]">
+              {badge}
+            </span>
+          ) : null}
+        </div>
         <h2 className="mt-2 font-[family-name:var(--font-outfit)] text-xl font-semibold text-[var(--text-primary)]">
           {title}
         </h2>

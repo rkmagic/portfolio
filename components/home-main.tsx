@@ -34,6 +34,7 @@ export function HomeMain() {
             title="Product teardowns"
             oneLiner="Structured critiques of real products — what works, what breaks, and what I would try next."
             href="/teardowns"
+            badge="Work in progress"
           >
             <ul className="list-none space-y-1 text-[var(--text-muted)]">
               {teardowns.map((t) => (
@@ -54,6 +55,7 @@ export function HomeMain() {
             title="Product projects"
             oneLiner="Case studies and side builds — context, trade-offs, and outcomes."
             href="/projects"
+            badge="Work in progress"
           >
             <ul className="list-none space-y-1 text-[var(--text-muted)]">
               {projects.map((p) => (

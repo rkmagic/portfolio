@@ -34,8 +34,11 @@ export default async function WritingPage({ params }: Props) {
   let data;
   try {
     data = await getWriting(slug);
-  } catch {
-    notFound();
+  } catch (error) {
+    if (error instanceof Error && error.message === "Not found") {
+      notFound();
+    }
+    throw error;
   }
 
   const { meta, content, readingTime } = data;
