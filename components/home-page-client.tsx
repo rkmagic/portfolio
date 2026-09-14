@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import {
   CinematicIntro,
   INTRO_REPLAY_EVENT,
-  INTRO_SESSION_KEY,
+  readIntroSeen,
 } from "@/components/cinematic-intro";
 
 export function HomePageClient({
@@ -40,13 +40,7 @@ export function HomePageClient({
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(INTRO_SESSION_KEY) === "1";
-    } catch {
-      /* ignore */
-    }
-    if (reduced || seen) {
+    if (reduced || readIntroSeen()) {
       setIntroDone(true);
     }
   }, []);

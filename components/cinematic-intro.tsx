@@ -8,13 +8,29 @@ import {
   useState,
 } from "react";
 
-export const INTRO_SESSION_KEY = "portfolio_intro_session_done";
+export const INTRO_STORAGE_KEY = "portfolio_intro_done";
 export const INTRO_REPLAY_EVENT = "portfolio:replay-intro";
+
+export function readIntroSeen() {
+  try {
+    return localStorage.getItem(INTRO_STORAGE_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function writeIntroSeen() {
+  try {
+    localStorage.setItem(INTRO_STORAGE_KEY, "1");
+  } catch {
+    /* ignore */
+  }
+}
 
 /** Clears the “intro already seen” flag and notifies the home page to remount it. */
 export function requestIntroReplay() {
   try {
-    sessionStorage.removeItem(INTRO_SESSION_KEY);
+    localStorage.removeItem(INTRO_STORAGE_KEY);
   } catch {
     /* ignore */
   }
@@ -81,7 +97,7 @@ export function CinematicIntro({
   forcePlay = false,
 }: {
   onDone: () => void;
-  /** Skip sessionStorage short-circuit (used when replaying from the header). */
+  /** Skip the stored “already seen” short-circuit (used when replaying from the header). */
   forcePlay?: boolean;
 }) {
   const doneRef = useRef(false);
@@ -116,11 +132,7 @@ export function CinematicIntro({
     if (doneRef.current) return;
     doneRef.current = true;
     stopAudio();
-    try {
-      sessionStorage.setItem(INTRO_SESSION_KEY, "1");
-    } catch {
-      /* ignore */
-    }
+    writeIntroSeen();
     onDoneRef.current();
   }, [stopAudio]);
 
@@ -176,7 +188,7 @@ export function CinematicIntro({
       return;
     }
     try {
-      if (!forcePlay && sessionStorage.getItem(INTRO_SESSION_KEY)) {
+      if (!forcePlay && readIntroSeen()) {
         finish();
         return;
       }
