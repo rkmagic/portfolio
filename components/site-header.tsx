@@ -5,13 +5,26 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { requestIntroReplay } from "@/components/cinematic-intro";
 import { useEmailContact } from "@/components/email-contact-provider";
+import { planets } from "@/lib/planets";
 import { site } from "@/lib/site";
 
 const nav = [
-  { href: "/about", label: "About" },
-  { href: "/teardowns", label: "Teardowns" },
-  { href: "/projects", label: "Projects" },
-  { href: "/writings", label: "Writings" },
+  { href: planets.about.href, label: "About", planet: planets.about.name },
+  {
+    href: planets.teardowns.href,
+    label: "Teardowns",
+    planet: planets.teardowns.name,
+  },
+  {
+    href: planets.projects.href,
+    label: "Projects",
+    planet: planets.projects.name,
+  },
+  {
+    href: planets.writings.href,
+    label: "Writings",
+    planet: planets.writings.name,
+  },
 ] as const;
 
 function LinkedInIcon() {
@@ -70,8 +83,9 @@ export function SiteHeader() {
             type="button"
             onClick={seeOnboardingAgain}
             className="min-h-[44px] rounded px-1.5 py-1 font-[family-name:var(--font-mono)] text-sm leading-tight text-[var(--text-muted)] transition-colors hover:text-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)] md:text-xs"
+            aria-label="Replay hyperspace intro"
           >
-            See onboarding again
+            Replay jump
           </button>
         </div>
 
@@ -81,6 +95,7 @@ export function SiteHeader() {
               key={item.href}
               href={item.href}
               className={linkClass}
+              title={item.planet}
               aria-current={pathname === item.href ? "page" : undefined}
             >
               {item.label}
@@ -148,6 +163,7 @@ export function SiteHeader() {
                 <Link
                   href={item.href}
                   className="block min-h-[44px] py-3 text-[var(--text-primary)]"
+                  title={item.planet}
                   onClick={() => setOpen(false)}
                 >
                   {item.label}

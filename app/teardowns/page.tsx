@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { PlanetKicker } from "@/components/planet-kicker";
 import { listTeardowns } from "@/lib/content/load";
+import { planets } from "@/lib/planets";
 
 export const metadata: Metadata = {
   title: "Product teardowns",
@@ -12,11 +14,13 @@ export default function TeardownsPage() {
   const items = listTeardowns();
   return (
     <Container className="pb-20 pt-10">
-      <h1 className="font-[family-name:var(--font-outfit)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
+      <PlanetKicker>{planets.teardowns.name}</PlanetKicker>
+      <h1 className="mt-2 font-[family-name:var(--font-outfit)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
         Product teardowns
       </h1>
       <p className="mt-4 max-w-2xl text-lg text-[var(--text-muted)]">
-        Placeholder listing — card copy comes from frontmatter until you replace it.
+        Structured critiques of products — what works, what does not, and what I
+        would try next.
       </p>
       <ul className="mt-12 grid gap-6 sm:grid-cols-1 md:grid-cols-2">
         {items.map(({ slug, meta }) => (

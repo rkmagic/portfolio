@@ -6,6 +6,7 @@ import {
   getTeardownSlugs,
 } from "@/lib/content/load";
 import { site } from "@/lib/site";
+import { planets } from "@/lib/planets";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -45,15 +46,16 @@ export default async function TeardownPage({ params }: Props) {
   return (
     <ContentLayout
       breadcrumbs={[
-        { href: "/", label: "Home" },
-        { href: "/teardowns", label: "Teardowns" },
+        { href: planets.home.href, label: planets.home.name },
+        { href: planets.teardowns.href, label: planets.teardowns.name },
         { href: `/teardowns/${slug}`, label: meta.title },
       ]}
+      planet={planets.teardowns.name}
       title={meta.title}
       description={meta.description}
       readingTime={readingTime}
-      backHref="/teardowns"
-      backLabel="Back to teardowns"
+      backHref={planets.teardowns.href}
+      backLabel={planets.teardowns.backLabel}
     >
       {content}
     </ContentLayout>

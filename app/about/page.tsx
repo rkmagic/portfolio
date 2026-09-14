@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { EmailLink } from "@/components/email-contact-provider";
+import { PlanetKicker } from "@/components/planet-kicker";
+import { planets } from "@/lib/planets";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -13,7 +15,8 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <Container className="pb-20 pt-10">
-      <h1 className="font-[family-name:var(--font-outfit)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
+      <PlanetKicker>{planets.about.name}</PlanetKicker>
+      <h1 className="mt-2 font-[family-name:var(--font-outfit)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
         About
       </h1>
       <div className="mt-8 space-y-6 text-lg leading-relaxed text-[var(--text-primary)]">
@@ -110,7 +113,7 @@ export default function AboutPage() {
       </p>
       <p className="mt-6 text-sm text-[var(--text-muted)]">
         <Link href="/" className="hover:text-[var(--star-yellow)]">
-          ← Home
+          ← {planets.home.name}
         </Link>
       </p>
     </Container>

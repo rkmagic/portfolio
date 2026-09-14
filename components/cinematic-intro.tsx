@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { planets } from "@/lib/planets";
 
 export const INTRO_STORAGE_KEY = "portfolio_intro_done";
 export const INTRO_REPLAY_EVENT = "portfolio:replay-intro";
@@ -484,7 +485,7 @@ export function CinematicIntro({
         className="pointer-events-none absolute inset-x-0 top-[42%] z-10 px-6 text-center font-[family-name:var(--font-mono)] text-sm tracking-[0.2em] text-[var(--crawl-blue)] motion-safe:animate-intro-caption sm:text-base"
         style={{ textShadow: "0 0 14px rgba(75, 213, 238, 0.45)" }}
       >
-        Accelerating to Planet Rishi..
+        {planets.home.name}
       </p>
       {awaitingGesture ? (
         <p className="pointer-events-none absolute inset-x-0 top-[52%] z-10 px-6 text-center font-[family-name:var(--font-mono)] text-xs tracking-wide text-[var(--text-muted)]">

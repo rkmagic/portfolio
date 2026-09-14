@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { EmailLink } from "@/components/email-contact-provider";
+import { planets } from "@/lib/planets";
 import { site } from "@/lib/site";
 
 const footerLinkClass =
@@ -49,7 +50,7 @@ export function SiteFooter() {
             href="/"
             className="text-[var(--text-muted)] hover:text-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
           >
-            Home
+            {planets.home.name}
           </Link>
         </p>
       </div>

@@ -6,6 +6,7 @@ import {
   getProjectSlugs,
 } from "@/lib/content/load";
 import { site } from "@/lib/site";
+import { planets } from "@/lib/planets";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -45,15 +46,16 @@ export default async function ProjectPage({ params }: Props) {
   return (
     <ContentLayout
       breadcrumbs={[
-        { href: "/", label: "Home" },
-        { href: "/projects", label: "Projects" },
+        { href: planets.home.href, label: planets.home.name },
+        { href: planets.projects.href, label: planets.projects.name },
         { href: `/projects/${slug}`, label: meta.title },
       ]}
+      planet={planets.projects.name}
       title={meta.title}
       description={meta.description}
       readingTime={readingTime}
-      backHref="/projects"
-      backLabel="Back to projects"
+      backHref={planets.projects.href}
+      backLabel={planets.projects.backLabel}
     >
       {content}
     </ContentLayout>

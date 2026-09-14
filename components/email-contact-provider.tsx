@@ -155,6 +155,9 @@ export function EmailContactProvider({
           >
             Contact me
           </h2>
+          <p className="mt-1 font-[family-name:var(--font-mono)] text-xs uppercase tracking-wider text-[var(--crawl-blue)]">
+            Open a comms channel
+          </p>
 
           <div className="mt-6 flex flex-col gap-5">
             <div>

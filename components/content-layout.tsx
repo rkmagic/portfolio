@@ -2,9 +2,11 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { PlanetKicker } from "@/components/planet-kicker";
 
 export function ContentLayout({
   breadcrumbs,
+  planet,
   title,
   description,
   readingTime,
@@ -13,6 +15,7 @@ export function ContentLayout({
   backLabel,
 }: {
   breadcrumbs: { href: string; label: string }[];
+  planet?: string;
   title: string;
   description?: string;
   readingTime: number;
@@ -24,7 +27,10 @@ export function ContentLayout({
     <Container className="pb-20 pt-10">
       <Breadcrumbs items={breadcrumbs} />
       <header className="border-b border-[var(--card-border)] pb-8">
-        <p className="font-[family-name:var(--font-mono)] text-xs uppercase tracking-wider text-[var(--crawl-blue)]">
+        {planet ? <PlanetKicker>{planet}</PlanetKicker> : null}
+        <p
+          className={`font-[family-name:var(--font-mono)] text-xs uppercase tracking-wider text-[var(--text-muted)] ${planet ? "mt-2" : ""}`}
+        >
           {readingTime} min read
         </p>
         <h1 className="mt-2 font-[family-name:var(--font-outfit)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">

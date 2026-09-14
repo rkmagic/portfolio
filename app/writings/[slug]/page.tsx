@@ -4,6 +4,7 @@ import { ContentLayout } from "@/components/content-layout";
 import { LazyPdfEmbed } from "@/components/lazy-pdf-embed";
 import { getWriting, getWritingSlugs } from "@/lib/content/load";
 import { site } from "@/lib/site";
+import { planets } from "@/lib/planets";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -47,15 +48,16 @@ export default async function WritingPage({ params }: Props) {
   return (
     <ContentLayout
       breadcrumbs={[
-        { href: "/", label: "Home" },
-        { href: "/writings", label: "Writings" },
+        { href: planets.home.href, label: planets.home.name },
+        { href: planets.writings.href, label: planets.writings.name },
         { href: `/writings/${slug}`, label: meta.title },
       ]}
+      planet={planets.writings.name}
       title={meta.title}
       description={meta.description}
       readingTime={readingTime}
-      backHref="/writings"
-      backLabel="Back to writings"
+      backHref={planets.writings.href}
+      backLabel={planets.writings.backLabel}
     >
       {content}
 

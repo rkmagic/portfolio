@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { PlanetKicker } from "@/components/planet-kicker";
 import { listProjects } from "@/lib/content/load";
+import { planets } from "@/lib/planets";
 
 export const metadata: Metadata = {
   title: "Product projects",
@@ -12,7 +14,8 @@ export default function ProjectsPage() {
   const items = listProjects();
   return (
     <Container className="pb-20 pt-10">
-      <h1 className="font-[family-name:var(--font-outfit)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
+      <PlanetKicker>{planets.projects.name}</PlanetKicker>
+      <h1 className="mt-2 font-[family-name:var(--font-outfit)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
         Product projects
       </h1>
       <p className="mt-4 max-w-2xl text-lg text-[var(--text-muted)]">

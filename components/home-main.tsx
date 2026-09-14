@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { HeroDroid } from "@/components/hero-droid";
+import { PlanetKicker } from "@/components/planet-kicker";
 import { SectionCard } from "@/components/section-card";
+import { planets } from "@/lib/planets";
 import { site } from "@/lib/site";
 import { listProjects, listTeardowns, listWritings } from "@/lib/content/load";
 
@@ -16,7 +18,8 @@ export function HomeMain() {
         <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between md:gap-8">
           <HeroDroid className="order-1 h-[72px] w-auto shrink-0 md:order-2 md:h-[140px]" />
           <div className="order-2 min-w-0 w-full md:order-1 md:flex-1">
-            <p className="font-[family-name:var(--font-mono)] text-sm text-[var(--crawl-blue)]">
+            <PlanetKicker className="text-sm">{planets.home.name}</PlanetKicker>
+            <p className="mt-2 font-[family-name:var(--font-mono)] text-sm text-[var(--text-muted)]">
               {site.tagline}
             </p>
             <h1 className="mt-4 font-[family-name:var(--font-outfit)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
@@ -30,10 +33,10 @@ export function HomeMain() {
 
         <div className="mt-12 grid gap-6 md:grid-cols-1 lg:grid-cols-3">
           <SectionCard
-            sectionNumber="01"
-            title="Product teardowns"
+            planet={planets.teardowns.name}
+            title={planets.teardowns.title}
             oneLiner="Structured critiques of real products — what works, what breaks, and what I would try next."
-            href="/teardowns"
+            href={planets.teardowns.href}
             badge="Work in progress"
           >
             <ul className="list-none space-y-1 text-[var(--text-muted)]">
@@ -51,10 +54,10 @@ export function HomeMain() {
           </SectionCard>
 
           <SectionCard
-            sectionNumber="02"
-            title="Product projects"
+            planet={planets.projects.name}
+            title={planets.projects.title}
             oneLiner="Case studies and side builds — context, trade-offs, and outcomes."
-            href="/projects"
+            href={planets.projects.href}
             badge="Work in progress"
           >
             <ul className="list-none space-y-1 text-[var(--text-muted)]">
@@ -72,10 +75,10 @@ export function HomeMain() {
           </SectionCard>
 
           <SectionCard
-            sectionNumber="03"
-            title="Writings"
+            planet={planets.writings.name}
+            title={planets.writings.title}
             oneLiner="Articles with product learnings, plus PDF decks from workshops and MBA work."
-            href="/writings"
+            href={planets.writings.href}
           >
             <ul className="list-none space-y-1 text-[var(--text-muted)]">
               {writings.slice(0, 5).map((w) => (
