@@ -107,12 +107,27 @@
   animation: droid-eye 2.2s ease-in-out infinite;
 }
 
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.motion-safe\:animate-star-twinkle {
+  animation: star-twinkle 4.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .motion-safe\:animate-warp-flash,
   .motion-safe\:animate-intro-caption,
   .motion-safe\:animate-droid-bob,
   .motion-safe\:animate-droid-antenna,
-  .motion-safe\:animate-droid-eye {
+  .motion-safe\:animate-droid-eye,
+  .motion-safe\:animate-star-twinkle {
     animation: none !important;
   }
 

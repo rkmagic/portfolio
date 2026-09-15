@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContentLayout } from "@/components/content-layout";
+import { LazyPdfEmbed } from "@/components/lazy-pdf-embed";
 import {
   getProject,
   getProjectSlugs,
@@ -58,6 +59,25 @@ export default async function ProjectPage({ params }: Props) {
       backLabel={planets.projects.backLabel}
     >
       {content}
+
+      {meta.pdfUrl ? (
+        <div className="mt-12 border-t border-[var(--card-border)] pt-10">
+          <h2 className="font-[family-name:var(--font-outfit)] text-2xl font-semibold text-[var(--text-primary)]">
+            Project PDF
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-[var(--text-primary)]">
+            <a
+              href={meta.pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-[var(--star-yellow)] underline decoration-[var(--star-yellow)]/50 underline-offset-4 transition-colors hover:decoration-[var(--star-yellow)]"
+            >
+              Open PDF in a new tab
+            </a>
+          </p>
+          <LazyPdfEmbed src={meta.pdfUrl} title={`${meta.title} PDF`} />
+        </div>
+      ) : null}
     </ContentLayout>
   );
 }

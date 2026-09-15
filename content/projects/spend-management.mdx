@@ -1,31 +1,52 @@
 ---
-title: "Financial Spend Management"
-description: "Dummy case study — replace with your story."
-date: "2025-11-10"
-company: "Placeholder company"
-outcome: "Placeholder outcome metric or qualitative result."
+title: "Financial spend management"
+description: "Personal dashboard that turns bank and receipt emails into a live picture of spend - overview, subscriptions, and grounded AI chat."
+date: "2026-05-16"
+company: "Personal"
+outcome: "Shipped Fintrack: n8n + Claude ingest inbox spend into a Next.js dashboard on Vercel."
+pdfUrl: "/pdfs/spend-management.pdf"
 ---
 
 ## Context
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem. Replace with company, product surface, team shape, and your role.
+Something I built for my final project in my AI for business MBA course, May 2026. 
 
 ## Problem
 
-Placeholder description of what was broken or underperforming before you intervened.
+I used to receive receipts and bank alerts by email for transactions on different cards. I wanted one private place that captured spend with a full view on my transactions. I also faced this problem where I would forget about subscriptions that I signed up and no longer needed, but ended up losing money due to auto-renewal. 
 
 ## Process
 
-Placeholder discovery, prioritization, and trade-offs — enough for a hiring manager to see how you think.
+The solution needed to be end-to-end right from ingesting this data to feeding it to a database for a dashboard.
 
-## Solution
+The dashboard offers the following:
+- Transactions history trend over calendar days, weeks.
+- Categorization by type. Food, travel, groceries etc. Categorization by merchant.
+- See spend by currency basis exchange rates.
+- AI insights and option to ask questions about your transactions to a chatbot. (Last 90 days)
+- Subscriptions tracking with renewal dates and cadence (weekly/monthly/yearly)
 
-Placeholder summary of what shipped. Add mockups or screenshots later.
+### What does the n8n automation entail?
+- Connected to my gmail to extract spends. Can take text, PDFs or HTML files (Sometimes companies render a custom HTML page in emails).
+- Rule-based logic wherever possible. Database writes is a risky operation so its better to verify AI's output and use gates like IF in n8n.
+- Update option to update existing subscriptions or transactions
+- AI Agent connected to serpAPI to google search ambiguous merchant names to categorize them better. If unresolved, listed as "Others". Categorization is done with a confidence score that can be changed.
+- Resolve and clean canonical names. Sometimes companies use names like Spotify AB or with tags like Anthropic,pbc.
 
-## Outcome
+### Don't fintech products like Apple Pay/Revolut already do this?
 
-Placeholder results — numbers if you can share them, otherwise directional evidence.
+They do a version of this but on their own rails. Apple Pay and Revolut already give you a statement, some categories, and a filter box. That breaks down when spend is split across cards, but "how much did I spend on coffee this quarter? isn't answered yet?" I'm sure there are apps that do this for a SaaS subscription but this is more customized to what I want to see. There is also additional effort to research the merchants.
 
-## Reflection
+That search is what I could not get from those apps. Fintrack is built around it: a ledger from the emails I already receive, plus a chatbot grounded in the last 90 days of *those* transactions, not a generic finance answer.
 
-Placeholder lessons learned or what you would do differently next time.
+## Outcomes
+
+The product is [Fintrack](https://github.com/rkmagic/Fintrack). The dashboard link is at [fintrack-zeta-two.vercel.app](https://fintrack-zeta-two.vercel.app). Currently there is no data so it looks empty. The full PDF below is the project write-up — problem, workflow, evaluation, and screenshots. I am not running this currently as it requires my n8n workflow to be always running on my laptop. 
+
+## Future Work
+
+- We can add calendar alerts to subscriptions renewals via Google Calendar API for example. - The current dashboard is grounded only for the last 90 days. This can be extended to more days by pulling in more data, on-demand. 
+- We could also build a mobile app for this where it collects the location during the transaction to better understand merchants. Sometimes you buy with shops inside some other building, like a cafeteria in a university. 
+- The n8n workflow can also be hosted on cloud.
+
+**Stack:** n8n, Claude, serpAPI, Supabase, Next.js, Vercel

@@ -11,6 +11,10 @@ export type ProjectMeta = {
   date: string;
   company: string;
   outcome: string;
+  /** Optional path under public/, e.g. /pdfs/spend-management.pdf */
+  pdfUrl?: string;
+  /** Optional thumbnail under public/, e.g. /images/fintrack.png */
+  coverImage?: string;
 };
 
 export type WritingKind = "article" | "deck";

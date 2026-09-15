@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { GalaxyBackdrop } from "@/components/galaxy-backdrop";
 import { HeroDroid } from "@/components/hero-droid";
 import { PlanetKicker } from "@/components/planet-kicker";
 import { SectionCard } from "@/components/section-card";
@@ -13,8 +14,9 @@ export function HomeMain() {
   const writings = listWritings();
 
   return (
-    <div className="pb-20 pt-12 sm:pt-16">
-      <Container>
+    <div className="relative overflow-hidden pb-20 pt-12 sm:pt-16">
+      <GalaxyBackdrop />
+      <Container className="relative">
         <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between md:gap-8">
           <HeroDroid className="order-1 h-[72px] w-auto shrink-0 md:order-2 md:h-[140px]" />
           <div className="order-2 min-w-0 w-full md:order-1 md:flex-1">
@@ -38,6 +40,7 @@ export function HomeMain() {
             oneLiner="Structured critiques of real products — what works, what breaks, and what I would try next."
             href={planets.teardowns.href}
             badge="Work in progress"
+            planetVariant="teardown"
           >
             <ul className="list-none space-y-1 text-[var(--text-muted)]">
               {teardowns.map((t) => (
@@ -59,6 +62,7 @@ export function HomeMain() {
             oneLiner="Case studies and side builds — context, trade-offs, and outcomes."
             href={planets.projects.href}
             badge="Work in progress"
+            planetVariant="projects"
           >
             <ul className="list-none space-y-1 text-[var(--text-muted)]">
               {projects.map((p) => (
@@ -79,6 +83,7 @@ export function HomeMain() {
             title={planets.writings.title}
             oneLiner="Articles with product learnings, plus PDF decks from workshops and MBA work."
             href={planets.writings.href}
+            planetVariant="writings"
           >
             <ul className="list-none space-y-1 text-[var(--text-muted)]">
               {writings.slice(0, 5).map((w) => (
