@@ -106,10 +106,17 @@ export default function AboutPage() {
         </a>{" "}
         has a fuller work history.
       </p>
-      <p className="mt-8">
+      <p className="mt-8 flex flex-wrap items-center gap-3">
         <EmailLink className="inline-flex min-h-[44px] items-center rounded border border-[var(--star-yellow)] bg-[var(--star-yellow)] px-5 py-2 text-sm font-medium text-black hover:bg-[#e6b800] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]">
           Contact me
         </EmailLink>
+        <a
+          href={site.resumeUrl}
+          download={site.resumeDownloadName}
+          className="inline-flex min-h-[44px] items-center rounded border border-[var(--card-border)] px-5 py-2 text-sm font-medium text-[var(--text-primary)] hover:border-[var(--star-yellow)] hover:text-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
+        >
+          Download resume
+        </a>
       </p>
       <p className="mt-6 text-sm text-[var(--text-muted)]">
         <Link href="/" className="hover:text-[var(--star-yellow)]">

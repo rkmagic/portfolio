@@ -28,6 +28,8 @@ I created an API for the node app that can take recordings. Hosted on Render wit
 
 I initially tried to create the worklflow using Make but there were issues. Multipart field names were inconsistent (`files` vs `file` vs `audio` vs `audio_file`), extra file parts overloaded file handling, and Telegram “.m4a” voice notes were actually 3GPP (`ftyp 3gp4`) that Whisper rejects. Those are now remuxed to AAC in MP4 before the API call.
 
+Finally, I have a Claude skill that I use to create the summary in .md format.
+
 ![n8n-workflow](/images/n8n_meeting.png)
 
 The n8n workflow is a simple one. There is a timer added to wake up the render server as its on sleep if unused.
@@ -38,7 +40,12 @@ The n8n workflow is a simple one. There is a timer added to wake up the render s
 
 I am now able to transcribe many recordings of long duration withins a few cents ($0.006/minute) without paying monthly SaaS subscriptions. 
 
-Future work can include connecting the transcribed .zip file with the .txt files to a Claude API which uses a skill.md file to output a final summary of notes in .md format. I currently do this manually with a skill on my Claude app to avoid paying again for Claude API tokens. These .md notes could also automatically be fed into a knowledge base for retrieval. 
+This also acts as a part of my product discovery where I turn conversaionts into notes that are classified into insights, action items, key points and open questions.
+
+## Future Work
+
+- Connecting the transcribed .zip file with the .txt files to a Claude API which uses a skill.md file to output a final summary of notes in .md format. I currently do this manually with a skill on my Claude app to avoid paying again for Claude API tokens. 
+- These .md notes could also automatically be fed into a knowledge base for retrieval. 
 
 ## Supporting Links:
 

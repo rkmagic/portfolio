@@ -1,6 +1,6 @@
 ---
 title: "WHO data analysis"
-description: "Life Expectancy Analysis"
+description: "Life Expectancy Analysis and Visualization of the data"
 date: "2026-03-20"
 kind: deck
 pdfUrl: "/pdfs/who-data-analysis.pdf"
@@ -16,6 +16,13 @@ The goal was to find drivers of life expectancy and analyze patterns across coun
 
 Dataset was from 2000 to 2015 for 193 countries.
 
+## Process
+
+- Used Claude to find errors, anomalies and null values.
+- Built the dashboard on looker and generated charts. This also involved some new column creations and formulae on looker studio which Claude helped with.
+- Augmented Human Development Index and PMI (Pollution) data to the life expectancy dataset
+- Statistics, Research and Conclusions were done by me and Claude
+
 ## Key points
 
 - High HDI and population didn't correlate with life expectancy. "Resource Curse" impacted countries with High HDI like Angola and Cameroon.
@@ -26,3 +33,5 @@ Dataset was from 2000 to 2015 for 193 countries.
 ## Full Analysis and link to dashboard built on looker studio
 
 <a href="https://datastudio.google.com/reporting/cd644716-7ee2-4de2-ba2d-36690a3fd140">Looker Studio Dashboard </a>
+
+![dashboard_image](/images/dashboard-who.png)

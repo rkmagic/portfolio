@@ -41,10 +41,11 @@ That search is what I could not get from those apps. Fintrack is built around it
 
 ## Outcomes
 
-The product is [Fintrack](https://github.com/rkmagic/Fintrack). The dashboard link is at [fintrack-zeta-two.vercel.app](https://fintrack-zeta-two.vercel.app). Currently there is no data so it looks empty. The full PDF below is the project write-up — problem, workflow, evaluation, and screenshots. I am not running this currently as it requires my n8n workflow to be always running on my laptop. 
+The product is [Fintrack](https://github.com/rkmagic/Fintrack). The full PDF below is the project write-up — problem, workflow, evaluation, and screenshots. I am not running this currently as it requires my n8n workflow to be always running on my laptop. 
 
 ## Future Work
 
+- This project relies on the assumption that transactions land to emails, so certain alerts need to be configured to enable that. If APIs are available, they can ingested into the system.
 - We can add calendar alerts to subscriptions renewals via Google Calendar API for example. - The current dashboard is grounded only for the last 90 days. This can be extended to more days by pulling in more data, on-demand. 
 - We could also build a mobile app for this where it collects the location during the transaction to better understand merchants. Sometimes you buy with shops inside some other building, like a cafeteria in a university. 
 - The n8n workflow can also be hosted on cloud.

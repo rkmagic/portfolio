@@ -24,6 +24,9 @@ export const site = {
     "https://www.linkedin.com/in/rishikashyap01/",
   githubUrl: process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/rkmagic",
   blogUrl: process.env.NEXT_PUBLIC_BLOG_URL ?? "https://kolli.vercel.app/",
+  /** Served from `public/pdfs/` */
+  resumeUrl: "/pdfs/Rishi Kashyap_CV_12_Sep.pdf",
+  resumeDownloadName: "Rishi-Kashyap-CV.pdf",
   /** Digits only, country code included (no +). Used for wa.me links. */
   whatsappNumber:
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "491791673876",

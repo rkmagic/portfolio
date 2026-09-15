@@ -94,6 +94,13 @@ export function SiteFooter() {
           >
             GitHub
           </a>
+          <a
+            href={site.resumeUrl}
+            download={site.resumeDownloadName}
+            className={footerLinkClass}
+          >
+            Resume
+          </a>
           <EmailLink className={footerLinkClass}>Contact</EmailLink>
           <a
             href={site.blogUrl}

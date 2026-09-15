@@ -129,6 +129,13 @@ export function SiteHeader() {
           >
             <GitHubIcon />
           </a>
+          <a
+            href={site.resumeUrl}
+            download={site.resumeDownloadName}
+            className={linkClass}
+          >
+            Resume
+          </a>
           <button
             type="button"
             className="ml-1 inline-flex min-h-[44px] items-center rounded border border-[var(--star-yellow)] bg-[var(--star-yellow)] px-4 py-2 text-sm font-medium text-black transition hover:bg-[#e6b800] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
@@ -198,6 +205,16 @@ export function SiteHeader() {
                 className="block min-h-[44px] py-3"
               >
                 GitHub
+              </a>
+            </li>
+            <li>
+              <a
+                href={site.resumeUrl}
+                download={site.resumeDownloadName}
+                className="block min-h-[44px] py-3"
+                onClick={() => setOpen(false)}
+              >
+                Resume
               </a>
             </li>
             <li>

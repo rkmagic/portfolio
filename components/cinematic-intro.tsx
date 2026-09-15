@@ -108,12 +108,10 @@ export function CinematicIntro({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const volumeRafRef = useRef(0);
-  const mutedRef = useRef(false);
-  const audioUnlockedRef = useRef(false);
+  const mutedRef = useRef(true);
   const introStartedAtRef = useRef(0);
 
-  const [musicMuted, setMusicMuted] = useState(false);
-  const [awaitingGesture, setAwaitingGesture] = useState(true);
+  const [musicMuted, setMusicMuted] = useState(true);
   mutedRef.current = musicMuted;
 
   const [play, setPlay] = useState(true);
@@ -152,35 +150,6 @@ export function CinematicIntro({
     }
   };
 
-  const unlockAudio = useCallback(() => {
-    if (doneRef.current || mutedRef.current || audioUnlockedRef.current) {
-      return;
-    }
-    const el = audioRef.current;
-    if (!el) return;
-
-    // Mark unlocked first so a late muted-autoplay reject cannot remute us.
-    audioUnlockedRef.current = true;
-    setAwaitingGesture(false);
-
-    // iOS: unmuting an already-playing element is not enough — pause, then
-    // play() unmuted inside this same user gesture.
-    try {
-      el.pause();
-    } catch {
-      /* ignore */
-    }
-    el.muted = false;
-    el.loop = false;
-    el.volume = SFX_BASE_VOLUME;
-    seekToIntroElapsed(el);
-    void el.play().catch(() => {
-      if (doneRef.current || mutedRef.current) return;
-      audioUnlockedRef.current = false;
-      setAwaitingGesture(true);
-    });
-  }, []);
-
   useLayoutEffect(() => {
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -198,25 +167,6 @@ export function CinematicIntro({
     }
     setPlay(true);
   }, [finish, forcePlay]);
-
-  useEffect(() => {
-    if (!play) return;
-    const unlock = (e: Event) => {
-      const target = e.target as HTMLElement | null;
-      if (target?.closest("[data-intro-control]")) return;
-      unlockAudio();
-    };
-    // Capture so the first tap wins even if a child stops bubbling.
-    // touchstart covers older mobile browsers that delay or skip pointerdown.
-    window.addEventListener("pointerdown", unlock, { capture: true });
-    window.addEventListener("touchstart", unlock, { capture: true });
-    window.addEventListener("keydown", unlock, { capture: true });
-    return () => {
-      window.removeEventListener("pointerdown", unlock, { capture: true });
-      window.removeEventListener("touchstart", unlock, { capture: true });
-      window.removeEventListener("keydown", unlock, { capture: true });
-    };
-  }, [play, unlockAudio]);
 
   useEffect(() => {
     if (!play) return;
@@ -260,9 +210,8 @@ export function CinematicIntro({
       el.loop = false;
       el.muted = true;
       el.volume = SFX_BASE_VOLUME;
-      // Buffer muted so the first tap can start audible playback immediately.
       const warm = () => {
-        if (!el || doneRef.current || audioUnlockedRef.current) return;
+        if (!el || doneRef.current) return;
         const trim = AUDIO_TRIM_START_S;
         if (Number.isFinite(el.duration) && el.duration > trim + 0.35) {
           try {
@@ -291,7 +240,7 @@ export function CinematicIntro({
             ? Math.max(0, 1 - (elapsed - fadeStart) / FADE_OUT_MS)
             : 1;
         audio.volume = SFX_BASE_VOLUME * fadeMul;
-        audio.muted = mutedRef.current || !audioUnlockedRef.current;
+        audio.muted = mutedRef.current;
       }
       volumeRafRef.current = requestAnimationFrame(tick);
     };
@@ -419,8 +368,12 @@ export function CinematicIntro({
     el.muted = next;
     el.volume = SFX_BASE_VOLUME;
     if (!next) {
-      audioUnlockedRef.current = true;
-      setAwaitingGesture(false);
+      // Unmute must happen inside this click so browsers allow audible play().
+      try {
+        el.pause();
+      } catch {
+        /* ignore */
+      }
       seekToIntroElapsed(el);
       void el.play().catch(() => {});
     } else {
@@ -487,29 +440,22 @@ export function CinematicIntro({
       >
         {planets.home.name}
       </p>
-      {awaitingGesture ? (
-        <p className="pointer-events-none absolute inset-x-0 top-[52%] z-10 px-6 text-center font-[family-name:var(--font-mono)] text-xs tracking-wide text-[var(--text-muted)]">
-          Tap anywhere for sound
-        </p>
-      ) : null}
 
       <div className="relative z-20 mt-auto flex flex-wrap items-end justify-end gap-3 p-4">
         <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center sm:gap-4">
-          {!awaitingGesture ? (
-            <button
-              type="button"
-              data-intro-control
-              className="min-h-[44px] rounded border border-[var(--card-border)] bg-black/60 px-3 py-2 font-[family-name:var(--font-mono)] text-xs text-[var(--crawl-blue)] backdrop-blur-sm hover:border-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)] sm:text-sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleMusicMuted();
-              }}
-              aria-pressed={musicMuted}
-              aria-label={musicMuted ? "Unmute intro sound" : "Mute intro sound"}
-            >
-              {musicMuted ? "Unmute" : "Mute"}
-            </button>
-          ) : null}
+          <button
+            type="button"
+            data-intro-control
+            className="min-h-[44px] rounded border border-[var(--card-border)] bg-black/60 px-3 py-2 font-[family-name:var(--font-mono)] text-xs text-[var(--crawl-blue)] backdrop-blur-sm hover:border-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)] sm:text-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleMusicMuted();
+            }}
+            aria-pressed={musicMuted}
+            aria-label={musicMuted ? "Unmute intro sound" : "Mute intro sound"}
+          >
+            {musicMuted ? "Unmute" : "Mute"}
+          </button>
           <button
             type="button"
             data-intro-control

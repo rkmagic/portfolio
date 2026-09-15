@@ -1,31 +1,55 @@
 ---
-title: "First Android App"
-description: "Dummy case study — replace with your story."
+title: "Android companion app"
+description: "Sleep companion app - built on Google Sleep API detection synced to Firebase to power a live web app."
 date: "2025-11-10"
-company: "Placeholder company"
-outcome: "Placeholder outcome metric or qualitative result."
+company: "Tech Roulette Challenge"
+outcome: "Shipped an Android APK that passively detects sleep and syncs live presence to a shared Firebase backend."
+pdfUrl: "/pdfs/dormia-app.pdf"
 ---
 
 ## Context
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem. Replace with company, product surface, team shape, and your role.
+Having worked on mobile apps all the time, this was a challenge that felt like home. We built this for a Tech Challenge run by my university's Google Developers Club and we even reached the [final](https://www.linkedin.com/posts/vaibhavtyagi8_gdgoncampus-buildwithai-techroulette-activity-7455253555768340482-xxpZ) hosted in Google's Madrid Office (alongside my MBA peers Vaibhav Tyagi and Patricio Villar). 
+
+A gamified sleep product where going to bed on time is the sport. A web app owns leagues, leaderboards, the live world map, and Gemini-written “obituaries” when a streak dies. The Android app is the companion that makes the sport hard to cheat: it verifies sleep on-device and pushes presence into the same Firebase project the web reads.
+
+Repo: [rkmagic/dormia_app](https://github.com/rkmagic/dormia_app). Deck with the full product story is embedded below.
 
 ## Problem
 
-Placeholder description of what was broken or underperforming before you intervened.
+Every app on your phone is built to keep you awake. Knowing you should sleep is easy. Stopping work, study, or scrolling is the hard part — especially alone, when bedtime is negotiable.
+
+Sleep trackers already exist. What they do not create is stakes. Without competition, social presence, and a verification layer that is not “I tapped a button,” sleep goals stay optional. Wearables raise the bar, but we wanted something that works with the phone people already carry.
 
 ## Process
 
-Placeholder discovery, prioritization, and trade-offs — enough for a hiring manager to see how you think.
+We split the product: web for the game loop (targets, leagues, map, obituaries), Android for ground truth.
 
-## Solution
+On Android the job was narrow but non-negotiable:
 
-Placeholder summary of what shipped. Add mockups or screenshots later.
+- Sign in with Google so identity matches the web player (Firestore).
+- Run background sleep detection via Google Play Services Sleep APIs (classify + segment events), with manual Fall Asleep / Wake Up as a fallback.
+- Detect location (GPS first, IP fallback) so the live map can place the player by city / country / continent.
+- Keep field names aligned with the web client so sleep state and presence update in near real time.
 
-## Outcome
+Permissions were part of the product, not an afterthought: activity recognition, location, notifications (Android 13+), and a foreground service for continuous tracking. Without them, automatic detection collapses. Below is a screenshot of real-time data tracking from the app with manual buttons for quick testing.
 
-Placeholder results — numbers if you can share them, otherwise directional evidence.
+![Sample screenshot](/images/dormia-screenshot.jpeg)
 
-## Reflection
+**Stack:** Kotlin, Jetpack Compose, AndroidX Navigation + ViewModel, Firebase Auth + Firestore, Google Sign-In, Location Services, Google Sleep API.
 
-Placeholder lessons learned or what you would do differently next time.
+## Outcomes
+
+The APK ships the verification half of Dormia. When a player falls asleep or wakes, Firestore updates and the web live view can reflect it without trusting a checkbox. The broader product then does the rest: private leagues with invite codes, city/country/world rankings, a weekly pool that rewards the best sleepers, and public streak-loss obituaries.
+
+The PDF below is the challenge deck — problem framing, product twist, leagues, and tech surface.
+
+## Future Work
+
+We could improve this further by:
+- Desining a cleaner UI. The one developed was to demonstrate the capability.
+- Tighten the Android ↔ web contract further (schema versioning when fields change).
+- Improve confidence handling from Sleep API scores so borderline nights are less noisy on the leaderboard.
+
+**Supporting links:**
+- [Google Sleep API](https://developers.google.com/location-context/sleep)
