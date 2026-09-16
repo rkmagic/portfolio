@@ -8,57 +8,58 @@ outcome: "Using AI to execute tasks that aid your product strategy"
 
 ## Context
 
-15-09-2026 
+15-09-2026
 
-This is a self-case study of my AI usage to assist with product discovery. I have tried a myriad of tools for this but I often end up using the 2-3 tools that help the most. Not all the below points aren't related to just building products. Some of them relate to personal productivity which can always extend to product management too.
+A self case study of how I use AI for product discovery. I have tried many tools, but I usually rely on the 2-3 that help most. Not everything below is product-building only. Some of it is personal productivity that also extends to product management.
 
 ## Evidence
 
 ### Research
-Research is a big part of my AI usage. I barely use Google Search apart from the translate option while working on my desktop or if I need to search a place on Maps. I mostly rely on Perplexity if the research requires the latest information. I've noticed that perplexity is much better at collecting recent information than Claude. An example from last week, I was trying to find recent companies acquired by Bending Spoons and Claude told me Airtable is the most recent one. I was pretty sure it wasn't as I had read an article about it. I then asked Perplexity which gave the right answer. I've noticed this many times in the past.
 
-For questions that require deeper research, I use Claude research to synthesize a report. This was especially helpful when I was evaluating the Apple Music app for a project and needed to analyze all the reviews. Claude gave me a list of top 10 themes with number of users under each theme. I still manually verified a few reviews to ensure no hallucinating. Combining Perplexity and Claude for competition or market research is super helpful to create a base for your product decisions and a skill can be built to complile a report accroding to your needs. 
+Research is a large part of my AI usage. On desktop I barely use Google Search beyond Translate or Maps. For latest information I mostly use Perplexity, which I find better than Claude at collecting recent sources. Last week, when I asked about recent Bending Spoons acquisitions, Claude said Airtable was the most recent. I was sure that was wrong. Perplexity gave the correct answer. I have seen this pattern often.
 
-I see some people downlplaying Perplexity's existence. Its still a pretty good research engine imo.
+For deeper research I use Claude Research to synthesize a report. That helped when I evaluated the Apple Music app and needed to analyze reviews. Claude returned a top-10 theme list with user counts under each theme. I still manually checked a few reviews to catch hallucinations. Combining Perplexity and Claude for competitive or market research is a strong base for product decisions, and you can build a skill to compile reports to your needs.
+
+Some people downplay Perplexity. It is still a strong research engine.
 
 ![research-difference](/images/research.png)
 ![apple-music](/images/apple-music.png)
 
-Preparing questionnaires for customer interviews is another favorite use case. I give the key themes I want to cover with the user and feed relevant files for context along with information about the customer/speaker, time duraion and the goal of the interview. Claude sometimes gave interesting questions which I didn't think of. Recently, I was preparing to interview someone who had built a lot of AI automation. My questions included many things except human-in-the loop decisions which Claude suggested and that was like an aha moment.
+Preparing customer-interview questionnaires is another favorite use case. I give the themes I want to cover, relevant files for context, info about the speaker, time duration, and interview goal. Claude sometimes suggests questions I missed. Recently, while preparing to interview someone who built a lot of AI automation, my draft covered many topics but not human-in-the-loop decisions. Claude suggested it, and that was an aha moment.
 
 ### Data Analysis
 
-This for me is the superstar use case. AI can process so much data in seconds which previously took a few hours for an analyst. I haven't had the chance to work on customer data in the last 1 year due to my MBA, but in my workplace, AI was mainly helping with SQL queries. We were running analytics dashboards on Apache Superset and to analyze data, you needed to write a SQL query and Claude came to the rescue. I guess now you have natural language querying to get answers which comapnies like Databricks offer out-of-the-box with MCP connectors.
+This is the standout use case for me. AI can process in seconds what used to take an analyst hours. I have not worked with customer data in the last year during my MBA, but at work AI mainly helped with SQL. We ran analytics on Apache Superset, so analysis meant writing SQL, and Claude helped. Natural-language querying is now more common, including Databricks with MCP connectors.
 
-A recent example. I had a data fluency course where we had to analyze a life expectancy dataset of 193 countries. We had to build a looker studio dashboard to visualize the data and Claude helped finding anomalies. My primary goal was to check for anomalies in the dataset before starting analysis as wrong data can change inferences. Claude found out that some of the countries marked as developing/developed were incorrect. Claude also found China's population was unsually low in some years.
+Recent example: in a data fluency course we analyzed a life-expectancy dataset across 193 countries and built a Looker Studio dashboard. Before analysis I used Claude to find anomalies, since bad data warps inferences. Claude flagged countries mislabeled as developing/developed, and that China's population was unusually low in some years.
 
 ### Powerpoint creation
 
-Claude powerpoints initially were really helpful. I drafted the outline and then provide context to Claude. Claude then generates the powerpoints. A good example was a financial accounting problem where we had to analyze a case and present our findingds. I worked on the excel and Claude created the powerpoint. After some point however, the powerpoints started to look the same. I tried gamma.ai, beautiful.ai and other solutions but it was easy to tell. I then had this idea of using gemini to give an image of how a slide design and I manually re-created this on powerpoint and it turned out really nice. 
+Claude PowerPoints were useful early on. I drafted the outline, gave Claude context, and it generated the slides. One example was a financial accounting case: I worked the Excel, Claude built the PowerPoint. Over time the decks started looking the same. I tried Gamma.ai, Beautiful.ai, and similar tools, but the sameness was still obvious. Then I used Gemini to generate a slide-design image and recreated it manually in PowerPoint. That looked much better.
 
-I'm yet to come across something that can create consulting or investment banking grade powerpoints where there's a lot of information that needs to be creatively packed.
+I have not yet found a tool that reliably produces consulting or investment-banking grade decks packed with dense information.
 
 ![powerpoint_image](/images/powerpoint.png)
 
-This was me being picky about complete dislike towards the same template, colors and fonts but this can be an easy pipeline with a skill. The skill can also adhere to brand guidelines of the company. An example pipeline:
+This was me being picky about repeated templates, colors, and fonts, but it can become an easy pipeline with a skill that also follows brand guidelines. Example pipeline:
 
-User wants to create powerpoint -> Ask for outline -> Discuss and get enough information on outline -> Finalize outline -> Create 50% of slides -> Get feedback -> Complete the rest of the slides.
+User wants a PowerPoint → ask for outline → discuss until the outline is solid → finalize outline → create 50% of slides → get feedback → finish the rest.
 
 ### Knowledge Base
 
-Something I intend to build in a more robust way. I'm currently exploring ways to compress all the documents I have on my MBA, my meeting notes, articles, projects, pdfs, powerpoints etc into a single knowledge base which I can talk to.
+Something I intend to build more robustly: compress MBA documents, meeting notes, articles, projects, PDFs, and PowerPoints into a single knowledge base I can talk to.
 
-I recently built a smaller version of this using Cursor for a course, where we had to create a knowledge base of a publicly traded company. I chose Delta airlines purely out of my interest for aviation. The knowledge base with the process and report is available in this repo - [rkmagic/kb](https://github.com/rkmagic/kb-delta-analytics). The knowledge base can then be visualized very easily in tools like Obisidan. Here's a snapshot.
+I recently built a smaller version in Cursor for a course: a knowledge base for a publicly traded company. I chose Delta Air Lines out of interest in aviation. Process and report: [rkmagic/kb](https://github.com/rkmagic/kb-delta-analytics). The knowledge base visualizes easily in tools like Obsidian. Snapshot below.
 
 ![obsidian-graph](/images/obsidian.png)
 
-The same process can be repeated for product documents. Build a knowledge base with .md files which contains user interviews, meeting notes, product startegy documents, PRDs etc so your work is like a living document and new artefacts and documents can be easily created and challenged as the AI has enough context.
+The same process works for product docs: a knowledge base of `.md` files covering user interviews, meeting notes, strategy docs, PRDs, and more. Work becomes a living document, and new artefacts can be created and challenged with enough context.
 
 ## Reflection
 
-My final takeaway. 
-- see opportunities for AI usage
-- use it to challenge your thought process.
-- build/use skills for repeat usage and update them when needed
-- humans still need to orchestrate the work to avoid generic output
-- verify the output. No matter how good the model is, there is always context that it can miss. 
+Takeaways:
+- See opportunities for AI usage
+- Use it to challenge your thinking
+- Build or use skills for repeat work, and update them when needed
+- Humans still need to orchestrate the work to avoid generic output
+- Verify the output. No matter how good the model is, it can miss context

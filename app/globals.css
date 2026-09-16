@@ -9,7 +9,7 @@
   --text-primary: #e8e6e3;
   --text-muted: #8a8a8a;
   --card-bg: rgba(255, 255, 255, 0.04);
-  --card-border: rgba(255, 255, 255, 0.08);
+  --card-border: rgba(255, 255, 255, 0.14);
   --card-hover: rgba(255, 255, 255, 0.08);
   --background: var(--bg-deep);
   --foreground: var(--text-primary);

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { GalaxyTrail } from "@/components/planet-nav";
 import { PlanetKicker } from "@/components/planet-kicker";
 import { listProjects } from "@/lib/content/load";
 import { planets } from "@/lib/planets";
@@ -14,6 +15,7 @@ export default function ProjectsPage() {
   const items = listProjects();
   return (
     <Container className="pb-20 pt-10">
+      <GalaxyTrail currentHref={planets.projects.href} />
       <PlanetKicker>{planets.projects.name}</PlanetKicker>
       <h1 className="mt-2 font-[family-name:var(--font-outfit)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
         Product projects

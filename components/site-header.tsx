@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { requestIntroReplay } from "@/components/cinematic-intro";
 import { useEmailContact } from "@/components/email-contact-provider";
-import { planets } from "@/lib/planets";
+import { planetFromPathname, planets } from "@/lib/planets";
 import { site } from "@/lib/site";
 
 const nav = [
@@ -61,6 +61,7 @@ export function SiteHeader() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const { openEmailDialog } = useEmailContact();
+  const activePlanet = planetFromPathname(pathname);
 
   const seeOnboardingAgain = () => {
     requestIntroReplay();
@@ -90,17 +91,20 @@ export function SiteHeader() {
         </div>
 
         <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={linkClass}
-              title={item.planet}
-              aria-current={pathname === item.href ? "page" : undefined}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {nav.map((item) => {
+            const isCurrent = activePlanet?.href === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`${linkClass}${isCurrent ? " text-[var(--star-yellow)]" : ""}`}
+                title={item.planet}
+                aria-current={isCurrent ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
           <a
             href={site.blogUrl}
             target="_blank"
@@ -165,18 +169,22 @@ export function SiteHeader() {
           aria-label="Mobile primary"
         >
           <ul className="flex flex-col gap-1">
-            {nav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="block min-h-[44px] py-3 text-[var(--text-primary)]"
-                  title={item.planet}
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {nav.map((item) => {
+              const isCurrent = activePlanet?.href === item.href;
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`block min-h-[44px] py-3 ${isCurrent ? "text-[var(--star-yellow)]" : "text-[var(--text-primary)]"}`}
+                    title={item.planet}
+                    aria-current={isCurrent ? "page" : undefined}
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
             <li>
               <a
                 href={site.blogUrl}

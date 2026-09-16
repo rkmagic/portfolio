@@ -21,7 +21,7 @@ export function SectionCard({
   children?: ReactNode;
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-lg border border-[var(--card-border)] bg-[var(--card-bg)] p-6 shadow-none transition-transform duration-200 hover:-translate-y-[3px] hover:bg-[var(--card-hover)]">
+    <div className="group relative overflow-hidden rounded-lg border border-[var(--card-border)] bg-[var(--card-bg)] p-6 shadow-none transition-[background-color,transform] duration-200 hover:-translate-y-[3px] hover:bg-[var(--card-hover)] active:bg-[var(--card-hover)]">
       <div
         className="pointer-events-none absolute -right-6 -top-6 h-32 w-32 rounded-full bg-[var(--crawl-blue)] opacity-[0.07] blur-2xl transition-opacity duration-300 group-hover:opacity-[0.12]"
         aria-hidden="true"
@@ -31,7 +31,7 @@ export function SectionCard({
         className="pointer-events-none absolute right-4 top-5 h-14 w-14 opacity-80 motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:rotate-[8deg] motion-safe:group-hover:scale-105"
       />
       <span
-        className="absolute left-0 right-0 top-0 h-0.5 origin-left scale-x-0 bg-[var(--star-yellow)] transition-transform duration-200 group-hover:scale-x-100"
+        className="pointer-events-none absolute left-0 right-0 top-0 h-0.5 origin-left scale-x-0 bg-[var(--star-yellow)] transition-transform duration-200 group-hover:scale-x-100"
         aria-hidden="true"
       />
       <Link

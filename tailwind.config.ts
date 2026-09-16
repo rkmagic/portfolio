@@ -6,6 +6,11 @@ export default {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  future: {
+    // Prevents sticky :hover on touch — first tap was applying hover lift
+    // instead of navigating into planet cards on mobile.
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     extend: {
       colors: {

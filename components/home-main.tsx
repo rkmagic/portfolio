@@ -61,7 +61,6 @@ export function HomeMain() {
             title={planets.projects.title}
             oneLiner="Case studies and side builds — context, trade-offs, and outcomes."
             href={planets.projects.href}
-            badge="Work in progress"
             planetVariant="projects"
           >
             <ul className="list-none space-y-1 text-[var(--text-muted)]">

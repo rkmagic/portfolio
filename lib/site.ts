@@ -16,7 +16,7 @@ export const site = {
   tagline: "Product Manager | AI-Native | Empathy",
   headline: "Shaping the next generation of digital products.",
   description:
-    "I love building and scaling AI-native consumer products. Here, you will find a breakdown of my process, my builds, and my learnings from the past.",
+    "I love building 0-to-1 products particularly AI-native ones. Here, you will find a breakdown of my process, my builds, and my learnings from the past.",
   url: resolveSiteUrl(),
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "rishi38199@gmail.com",
   linkedInUrl:

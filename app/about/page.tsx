@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Container } from "@/components/container";
 import { EmailLink } from "@/components/email-contact-provider";
+import Link from "next/link";
+import { GalaxyTrail } from "@/components/planet-nav";
 import { PlanetKicker } from "@/components/planet-kicker";
 import { planets } from "@/lib/planets";
 import { site } from "@/lib/site";
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <Container className="pb-20 pt-10">
+      <GalaxyTrail />
       <PlanetKicker>{planets.about.name}</PlanetKicker>
       <h1 className="mt-2 font-[family-name:var(--font-outfit)] text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
         About

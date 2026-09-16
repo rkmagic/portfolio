@@ -7,47 +7,47 @@ kind: article
 
 ## What are they?
 
-I'm sure you have seen these every day on your device. An average user receives more than 30-40 notifications per day. On Android, notifications sit in the tray alert which most people picture, but in practice, product teams treat a whole family of surfaces as the same toolkit: standard push, sticky (persistent) notifications that sit in the tray without being dismissed and FSI (full-screen intent) for high-stakes moments.
+You see them every day on your device. An average user receives more than 30-40 notifications per day. On Android, notifications sit in the tray alert most people picture, but product teams often treat a whole family of surfaces as one toolkit: standard push, sticky (persistent) notifications that stay in the tray until dismissed, and FSI (full-screen intent) for high-stakes moments.
 
-Technically, Android has been tightening the rules around notifications for a while now. Since Android 8 (Oreo), every notification belongs to a channel, and users can mute individual channels rather than the app wholesale. Since Android 13, apps must request runtime permission (POST_NOTIFICATIONS) before sending anything which is a win for the user and a challenge for product teams. The notification permission can only be shown once if the user denies it so you have to be smart on when to show it. Opt-in rates on Android vary from 60% to 80% (much lower on iOS) and can depend on the category of the app like fintech, social media, travel, entertainment etc.
+Android has been tightening notification rules for a while. Since Android 8 (Oreo), every notification belongs to a channel, and users can mute individual channels instead of the whole app. Since Android 13, apps must request runtime permission (`POST_NOTIFICATIONS`) before sending anything. That is a win for users and a challenge for product teams. The permission prompt can only be shown once if the user denies it, so timing matters. Opt-in rates on Android vary from 60% to 80% (much lower on iOS) and depend on app category: fintech, social, travel, entertainment, and so on.
 
 ![Android notification tray](/images/android-notif.png)
 
 ## Types of notifications
 
-Broadly, notifications can be split either by techincality or type:
+Broadly, notifications can be split by type or by technical behavior:
 
 Type:
 - Transactional - a payment went through, a message arrived, a follow request. Users tolerate interruption here because the value is unambiguous and time-sensitive.
-- Content / engagement - breaking news, a horoscope reading, a game nudge, a discount, a remainder from your meditation app. These are great to bring back users but too much of it and the user can feel irritated and suffer from notification fatigue.
-- Personalized - Built on top of content, these notifications rely on your activity. It can be to pick up from your last movie, continue playing a particular game or finish onboarding of an application. They can be quite powerful but need smart segmenting from the backend.
+- Content / engagement - breaking news, a horoscope reading, a game nudge, a discount, a reminder from your meditation app. These can bring users back, but too many lead to irritation and notification fatigue.
+- Personalized - built on content, these rely on user activity: picking up where you left off in a movie, continuing a game, or finishing onboarding. They can be powerful, but need ML-driven backend segmentation.
 
 Technical:
-- Sticky notifications and full screen intents aren't "a notification" in the strict sense but function as one. 
-- Sticky notification sits permanently in the tray (high accidental-click surface) and sometimes cannot be dismissed by a swiping or clearing. Dismiss buttons need to be built or else the user can just turn off notifications for the app.
-- Full screen notifications take over the whole screen and is the most intrusive tool in the kit, reserved for rare, high-value moments. Usually its reserved for apps like the clock or system apps with Android enforcing tighter rules around how this can be used. 
+- Sticky notifications and full-screen intents are not "a notification" in the strict sense, but function as one.
+- A sticky notification sits permanently in the tray (high accidental-click surface) and sometimes cannot be dismissed by swiping or clearing. Dismiss buttons need to be built, or users may turn off notifications for the app entirely.
+- Full-screen notifications take over the whole screen and are the most intrusive tool in the kit, reserved for rare, high-value moments. Android usually reserves them for apps like the clock or other system apps, with tighter rules on how they can be used.
 
 ## How to get the best out of them?
 
-Products today continue to optimize on notifications and get the most out of this channel despite competition. Duolingo is a great example of how notifications are used to bring back users. Another example I like is Swiggy, the food delivery app from India who taunt users with their favorite foods at specific times of the day.
+Products continue to optimize notifications and get the most from this channel despite competition. Duolingo is a strong example of using notifications to bring users back. Another app I like is Swiggy, the Indian food delivery app, which nudges users with their favorite foods at specific times of day.
 
-**Be smart about the permission.** If you can't get the permission, it doesn't matter how good your strategy is. The gate needs to open and you don't get many chances. Showcasing the permission at a positive moment in the experience is a good way to get that permit. Even if the user denies it, you can still show nudges for them to change it in settings.
+**Be smart about the permission.** If you cannot get permission, your strategy does not matter. The gate has to open, and you do not get many chances. Showing the prompt at a positive moment in the experience helps. Even if the user denies it, you can still nudge them to change it in settings.
 
 ![Android notification permission](/images/android-permission.png)
 
-**Cohort, don't broadcast.** The same notification sent to everyone burns out fast. Power users can absorb more volume; dormant users need less, more relevant volume. Undifferentiated sends are the single biggest driver of fatigue. Content types matter where a particular user might like notifications only about sports and not weather for example. AI-driven personalization of notifications are almost the standard for the industry now. Personalization can kick in across times of the day, days of the week, user preferences selected during onboarding and much more.
+**Cohort, don't broadcast.** The same notification sent to everyone burns out fast. Power users can absorb more volume; dormant users need less, more relevant volume. Undifferentiated sends are the biggest driver of fatigue. Content type matters too: one user may want sports updates but not weather. AI-driven personalization is now close to standard. Personalization can apply across time of day, day of week, onboarding preferences, and more.
 
-**Check the integration end-to-end.** Delivery rate is a good metric to see how many users actually received your notifications. Sometimes integration issues can dip this metric. It could be that the push ID on your device isn't getting registered correctly or the SDK for notifications isn't initializaing correctly. Deeplinks which are links to land you in the app sometimes don't work leading to poor UX.
+**Check the integration end-to-end.** Delivery rate shows how many users actually received your notifications. Integration issues can drag it down: the push ID may not register correctly, or the notification SDK may fail to initialize. Broken deeplinks also hurt UX. Notifications behave differently depending on the OS (even custom android OS) and OEM so a thorough review across devices is a must.
 
-**Win the tray, not just the send.** Notifications compete with every other app's notifications for the same real estate. Small design changes - adding a clear CTA moves clicks, using images when necessary, playing around with the copy of the notification, A/B testing across cohorts can incrementally push the CTRs. Even though the user might not click the notification, view-through attribution can still win you that user. Sticky notifications are great for use cases which need to relay real-time information like showing the progress of your uber driver or a countdown to a ticket release. Of course, don't follow dark patterns by using deceptive copies or spamming notifications as trust once broken is hard to recover.
+**Win the tray, not just the send.** Notifications compete with every other app for the same space. Small design changes move clicks: a clear CTA, images when useful, sharper copy, A/B tests across cohorts can improve CTRs incrementally. Even without a click, view-through attribution can still win the user. Sticky notifications work well for real-time use cases like tracking an Uber driver or counting down to a ticket release. Do not use deceptive copy or spam users; once trust breaks, it is hard to recover.
 
-**Notifications aligned with your customer journey.** Optimizing for the right jump can push your app core metrics. It could be a notification to buy the product in the tray but the user has to land on the right page. Notifications can be spread out across days. D0,D3,D7,D14 where D0 is the day the user installed and opened the app.
+**Notifications aligned with your customer journey.** Landing users on the right screen can move core metrics. A notification to buy a product only helps if it opens the right page. Notifications can also be spread across the lifecycle: D0, D3, D7, D14, where D0 is install day.
 
-**Plan for decay.** Every notification type shows a novelty curve - CTR is highest in the first days and drops from there. Treat that decay as expected, not as a sign the format failed, and build refresh cycles rather than chasing the early numbers forever.
+**Plan for decay.** Every notification type follows a novelty curve: CTR is highest early and drops from there. Treat that decay as expected, not as proof the format failed, and build refresh cycles instead of chasing early numbers forever.
 
 ## Takeaway
 
-Bottom line, notifications are still useful. In today's world where attention span is low and multiple apps competing for the user's click, being smart about the entire notification strategy right from integration, design to execution can go a long way in driving traffic from a valuable but crowded channel. 
+Notifications are still useful. In a world of low attention spans and many apps competing for the same click, a smart strategy across integration, design, and execution can drive meaningful traffic from a crowded but valuable channel.
 
 ## Supporting Links
 

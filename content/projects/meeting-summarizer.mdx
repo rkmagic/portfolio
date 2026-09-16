@@ -8,44 +8,44 @@ outcome: "Shipped a Whisper-powered web app that chunks files over the 25 MB API
 
 ## Context
 
-Personal side project, started March 2026. I had long recordings from meetings, interviews, and voice notes. I needed a quick and easy solution that could turn a 1 hour voice recording into notes without buying another SaaS subscription.
+Personal side project, started March 2026. I had long recordings from meetings, interviews, and voice notes, and needed a quick way to turn a 1-hour recording into notes without another SaaS subscription.
 
-The repo is public: [rkmagic/stt_simple_asap](https://github.com/rkmagic/stt_simple_asap).
+Repo: [rkmagic/stt_simple_asap](https://github.com/rkmagic/stt_simple_asap).
 
 ## Problem
 
-I record many meetings/conversations/interviews using my phone microphone, so that I could convert it into notes, purely for self-reference and self-reflection. The duration of these recordings lasted anywhere from 20 mins to more than an hour. LLM chat tools rejected the files as too large. Consumer transcription sites did the same, or they were priced like a product I was not going to pay for occasional personal use. OpenAI Whisper was cheap enough to run myself, but the API caps uploads at about 25 MB - which most of my recordings exceeded.
+I record many meetings, conversations, and interviews on my phone microphone for self-reference and reflection. Recordings ran from about 20 minutes to over an hour. LLM chat tools rejected the files as too large. Consumer transcription sites did the same, or priced themselves like a product I would not pay for occasional personal use. OpenAI Whisper was cheap enough to run myself, but the API caps uploads at about 25 MB, which most of my recordings exceeded.
 
-The real job was not “call an API.” It was: drop in several messy audio files, wait without guessing if it hung, and walk away with transcripts I could copy, download, or zip.
+The real job was not "call an API." It was: drop in several messy audio files, wait without guessing if it hung, and walk away with transcripts I could copy, download, or zip.
 
 ## Process
 
-I scoped it as a local Node app first: upload UI, Whisper on the server, text I could review in the browser. FFmpeg was the non-negotiable dependency for anything over the size limit - `ffprobe` for duration, `ffmpeg` to split with stream copy so I was not re-encoding hour-long files. It took some iterations for FFmpeg to correctly work on the server but kudos for the developers of this amazing piece of software.
+I scoped it as a local Node app first: upload UI, Whisper on the server, and text to review in the browser. FFmpeg was the non-negotiable dependency for anything over the size limit: `ffprobe` for duration, `ffmpeg` to split with stream copy so I was not re-encoding hour-long files. It took some iteration to get FFmpeg working correctly on the server. When I make enough money, I'm going to do a donation FFmpeg for sure.
 
-Once that worked, I then automated the process of having to drop the recording from my phone into this node app.
+Once that worked, I automated dropping recordings from my phone into the Node app.
 
-I created an API for the node app that can take recordings. Hosted on Render with an optional bearer `API_KEY` so I could put it on a public URL without anyone burning my OpenAI key. Then followed a simple n8n workflow that can take files from a google drive and output the transcribed notes back into a google drive. This runs on my laptop using docker.
+I created an API for the Node app that accepts recordings, hosted on Render with an optional bearer `API_KEY` so I could put it on a public URL without anyone burning my OpenAI key. Then I built a simple n8n workflow that pulls files from Google Drive and writes transcribed notes back to Google Drive. It runs on my laptop via Docker.
 
-I initially tried to create the worklflow using Make but there were issues. Multipart field names were inconsistent (`files` vs `file` vs `audio` vs `audio_file`), extra file parts overloaded file handling, and Telegram “.m4a” voice notes were actually 3GPP (`ftyp 3gp4`) that Whisper rejects. Those are now remuxed to AAC in MP4 before the API call.
+I first tried Make, but hit issues. Multipart field names were inconsistent (`files` vs `file` vs `audio` vs `audio_file`), extra file parts overloaded handling, and Telegram ".m4a" voice notes were actually 3GPP (`ftyp 3gp4`) that Whisper rejects. Those are now remuxed to AAC in MP4 before the API call.
 
-Finally, I have a Claude skill that I use to create the summary in .md format.
+Finally, I use a Claude skill to turn transcripts into a `.md` summary.
 
 ![n8n-workflow](/images/n8n_meeting.png)
 
-The n8n workflow is a simple one. There is a timer added to wake up the render server as its on sleep if unused.
+The n8n workflow is simple. A timer wakes the Render server when it has gone to sleep from inactivity.
 
 **Final Stack:** Node.js, Express, n8n, OpenAI Whisper API, FFmpeg/ffprobe, Docker, Render
 
 ## Outcome
 
-I am now able to transcribe many recordings of long duration withins a few cents ($0.006/minute) without paying monthly SaaS subscriptions. 
+I can now transcribe long recordings for a few cents ($0.006/minute) without paying monthly SaaS subscriptions.
 
-This also acts as a part of my product discovery where I turn conversaionts into notes that are classified into insights, action items, key points and open questions.
+It also feeds product discovery: I turn conversations into notes classified into insights, action items, key points, and open questions. 
 
 ## Future Work
 
-- Connecting the transcribed .zip file with the .txt files to a Claude API which uses a skill.md file to output a final summary of notes in .md format. I currently do this manually with a skill on my Claude app to avoid paying again for Claude API tokens. 
-- These .md notes could also automatically be fed into a knowledge base for retrieval. 
+- Connect the transcribed `.zip` / `.txt` files to a Claude API that uses a `skill.md` to output a final `.md` summary. I currently do this manually with a skill in the Claude app to avoid paying again for Claude API tokens.
+- Feed these `.md` notes automatically into a knowledge base for retrieval.
 
 ## Supporting Links:
 

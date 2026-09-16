@@ -28,3 +28,33 @@ export const planets = {
     backLabel: "Back to Planet Archive",
   },
 } as const;
+
+export type PlanetId = keyof typeof planets;
+
+/** Destinations you can hop between inside the galaxy (excludes home + about). */
+export const planetDestinations = [
+  planets.teardowns,
+  planets.projects,
+  planets.writings,
+] as const;
+
+export type PlanetDestination = (typeof planetDestinations)[number];
+
+/** Resolve which planet section a pathname belongs to (includes About for header). */
+export function planetFromPathname(pathname: string): {
+  href: string;
+} | null {
+  if (
+    pathname === planets.about.href ||
+    pathname.startsWith(`${planets.about.href}/`)
+  ) {
+    return planets.about;
+  }
+
+  return (
+    planetDestinations.find(
+      (planet) =>
+        pathname === planet.href || pathname.startsWith(`${planet.href}/`),
+    ) ?? null
+  );
+}

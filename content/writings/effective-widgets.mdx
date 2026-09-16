@@ -7,37 +7,36 @@ kind: article
 
 ## Why widgets
 
-Widgets are small elements that you can place on your phone home screen. Most devices have 1-2 widgets by deafult, primarily the weather widget or the Google search widget on Android. They are extensions of the app acting as another surface of entry apart from the app icon and notifications. 
+Widgets are small elements you can place on your phone home screen. Most devices come with 1-2 widgets by default, usually the weather widget or Google Search on Android. They extend the app and create another entry surface alongside the app icon and notifications.
 
-While its hard to get widgets added by the user (under 10-15% of users depending on the product) unless they are preloaded with the device, they can still be a powerful source of app opens driving repeat usage bypassing the usual search for an app icon. Sometimes they also act as an indirect channel where users see interesting content on the widget, but open the app later. They are a window into your core app features. You also don't want just window shoppers so the intent of the widgets must be designed carefully with care towards function and aesthetics.
+It is hard to get users to add widgets unless they come preloaded on the device, and adoption is often below 10-15% depending on the product. Still, they can drive repeat app opens by removing the need to hunt for the app icon. They also work as an indirect channel: users may notice useful or interesting content on the widget, then open the app later. Widgets are a window into your core features, so their intent should be designed carefully, with equal attention to function and aesthetics.
 
 ![Android Widget](/images/widget.jpeg)
 
 ## Things to take care of
 
-- **Stay small unless necessary.** A widget that tries to be a mini-app can backfire. Smaller footprints get more tolerance. Larger the widget, higher the friction to place it as it occupies more space so the function must be justified. Each phone has its own way of handling grids. Your phone screen is divided into grids for widgets, for example, 4x4 or 3x4. While designing widgets, this must be kept in mind to not occupy empty space.
+- **Stay small unless necessary.** A widget that tries to be a mini-app can backfire. Smaller footprints are easier to tolerate. The larger the widget, the more friction there is to place it, since it takes up more space, so the function must justify the size. Phones also handle widget grids differently, such as 4x4 or 3x4, so design for those constraints and avoid wasted space.
 
-- **Give it its own interaction model.** A widget that just displays isn't pulling its weight unless its a utility app like a calendar. Card-cycling widgets that support refresh, next/previous, and a settings shortcut treat the widget as a real surface with its own controls - not a shrunk screenshot of the app.
+- **Give it its own interaction model.** A widget that only displays information is underused unless it serves a utility case like a calendar. Widgets with controls such as refresh, next/previous, or a settings shortcut treat the widget as a real surface, not a shrunk screenshot of the app.
 
-- **One tap, one destination.** Ambiguity is the enemy on a surface this small. A tap should go to exactly one clear place - no "which of these three things did you mean" moment once the user lands.
+- **One tap, one destination.** Ambiguity is the enemy on a surface this small. A tap should lead to one clear destination, with no "which of these three things did you mean" moment after the user lands.
 
-- **Brand it as its own asset, not a scaled-down icon.** Widget imagery, the prompt shown when Android asks to add it, and the widget's visual identity need their own design pass -they don't inherit correctly from the app icon or splash screen.
+- **Brand it as its own asset, not a scaled-down icon.** Widget imagery, the Android add prompt, and the widget's visual identity need their own design pass. They do not inherit well from the app icon or splash screen.
 
-- **Widget must work in sync with the app.** A widget has no scroll context and no "above the fold" lead-in from the rest of the app. Whatever hook or prompt it shows has to work as a complete, self-contained thought. The content of the widget needs to sync with the app. If I set preferences on the app and the widget doesn't reflect them, its not great for the user and vice-versa.
+- **The widget must stay in sync with the app.** A widget has no scroll context and no "above the fold" lead-in from the rest of the app. Whatever hook or prompt it shows has to work as a complete, self-contained thought. Its content also needs to stay synced with the app. If I set preferences in the app and the widget does not reflect them, or vice versa, the experience breaks down.
 
-- **Smart prompts.** Widgets need to be added by the user. The add options by default places them on a new screen that can be 3 or 4 screens away from the main homescreen. Drag and drop is ideal as you can place it on any screen of choice, but this needs more user effort. Showing nudges within the app right after a user gets value, can be a great way to add a widget. Here's an example shared by Google:
+- **Smart prompts.** Widgets have to be added by the user. The default add flow often places them on a separate screen that may be 3 or 4 swipes away from the main home screen. Drag and drop is better because it lets users place the widget where they want, but it also takes more effort. In-app nudges right after a user gets value can be an effective way to drive widget adds. Here is an example shared by Google:
 
 ![Android Widget Nudge](/images/widget_pinning.gif)
 
-- **Technical Challenges that need workarounds.** Android widgets render through `RemoteViews`, not arbitrary custom layouts, so designers has to work within that constrained component set from the start rather than being adapted after the fact. Google also puts a practical floor under how often a widget content can refresh on its own (roughly 30 minutes). Anything faster needs `WorkManager` or an alarm-driven update, which has its own battery-usage tradeoffs to design around. Since Android 12, widgets are also expected to pick up the system's dynamic (Material You) color scheme and support flexible resizing - a widget that hardcodes its own palette or a fixed size increasingly looks out of place next to system ones. You also cannot track CTRs since technically impressions of the widget are not accessible to app developers so metrics have to be treated like a regular app icon.
+- **Technical challenges need workarounds.** Android widgets render through `RemoteViews`, not arbitrary custom layouts, so designers need to work within a constrained component set from the start instead of adapting designs later. Google also puts a practical floor on how often widget content can refresh on its own, roughly every 30 minutes. Anything faster needs `WorkManager` or an alarm-driven update, which introduces battery tradeoffs. Since Android 12, widgets are also expected to adopt the system's dynamic Material You colors and support flexible resizing. A widget with a fixed palette or rigid size increasingly feels out of place next to system widgets. You also cannot track CTRs directly because widget impressions are not accessible to app developers, so performance has to be measured more like a regular app icon.
 
 ## Takeaway
 
-Widgets are powerful triggers to boost your product usage and just the addition of a widget by a user shows high intent and stickiness. Using them in combination with notifications is a great lever to improve retention and build a closer connection with your product. 
+Widgets are powerful triggers for product usage, and the act of adding one already signals high intent and stickiness. Used alongside notifications, they can improve retention and strengthen the user's connection with your product.
 
-While the % of users adding a widget can be very small, these users are most likely your power users and the voice of the product. Treat them well :).
+Even if only a small percentage of users add a widget, they are likely your power users and often the voice of the product. Treat them well :).
 
 Supporting Links:
 - [Android Widgets Discoverability](https://developer.android.com/develop/ui/views/appwidgets/discoverability)
 - [Case study on higher retention from widget users](https://developer.android.com/blog/posts/gratitude-saw-25-higher-retention-for-widget-users)
-
