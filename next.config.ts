@@ -14,7 +14,8 @@ const securityHeaders = [
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
-      "frame-ancestors 'none'",
+      // 'self' (not 'none') so /pdfs embeds in LazyPdfEmbed iframes still work
+      "frame-ancestors 'self'",
     ].join("; "),
   },
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -23,7 +24,7 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=()",
   },
-  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
 ];
 
 const nextConfig: NextConfig = {
