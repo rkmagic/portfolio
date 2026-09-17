@@ -3,7 +3,7 @@ title: "Financial spend management"
 description: "Personal dashboard that turns bank and receipt emails into a live picture of spend - overview, subscriptions, and grounded AI chat."
 date: "2026-05-16"
 company: "Personal"
-outcome: "Shipped Fintrack: n8n + Claude ingest inbox spend into a Next.js dashboard on Vercel."
+outcome: "Shipped Fintrack: n8n + Claude ingest inbox spend into a smart dashboard on Vercel."
 pdfUrl: "/pdfs/spend-management.pdf"
 ---
 
@@ -15,6 +15,24 @@ Built for my final project in the AI for Business MBA course, May 2026.
 
 I received receipts and bank alerts by email across different cards, and wanted one private place with a full view of my spend. I also kept forgetting about subscriptions I no longer needed, then losing money to auto-renewal.
 
+### Persona
+
+The persona I built for is the cross-border professional. They move between countries and pay with whatever works locally: a home credit card, a forex card, a local wallet. Their spend is split across rails that never roll up into one view. On top of that sit a dozen app and SaaS subscriptions on their own renewal dates and their own currencies. This person is not trying to budget to the cent. They want to answer "where did my money go last month?" without exporting three statements into a spreadsheet.
+
+### Product principles
+
+1. **Fact-based answers only.** Every insight, number, and chat answer traces back to a transaction in the database. When the data does not support an answer, the product says so instead of filling the gap with a generic finance tip.
+2. **Deterministic first, AI where it earns its place.** Rules handle parsing and database writes. AI is used where rules break down - unfamiliar merchants, custom HTML receipts - and its output passes a gate before anything is written.
+3. **Separate sections for easier viewability.** Overview, categories, currencies, and subscriptions each answer one question, so nothing has to be reassembled across views.
+4. **My data stays in my own stack.** No bank credentials handed to an aggregator, no third party holding the ledger.
+
+### Success criteria
+
+1. **Coverage** - the share of spend emails that reach the database correctly, with no manual correction.
+2. **Categorization quality** - merchants resolved to the right category, tracked by the confidence score, with "Others" as the failure bucket to keep small.
+3. **Grounded chat** - no answer that cites a number absent from the last 90 days of transactions.
+4. **Subscription recall** - every active subscription shows the correct cadence and next renewal date before it charges.
+
 ## Process
 
 The solution needed to be end-to-end: ingest the data, write it to a database, and surface it in a dashboard.
@@ -22,11 +40,13 @@ The solution needed to be end-to-end: ingest the data, write it to a database, a
 Architecture:
 ![workflow-architecture](/images/architecture.jpg)
 
-Getting n8n outputs into the right formats took time. Even with a robust prompt, Haiku 4.5 and Sonnet 4.6 sometimes failed to follow it fully, so I added code-snippet guardrails. I spotted failures in the n8n traces which resuled in these deterministic blocks. In a production system, observability tools like LangChain or MLflow would make this easier.
+Getting n8n outputs into the right formats took time. Even with a robust prompt, Haiku 4.5 and Sonnet 4.6 sometimes failed to follow it fully, so I added code-snippet guardrails. I spotted failures in the n8n traces, which resulted in these deterministic blocks. In a production system, observability tools like LangChain or MLflow would make this easier.
 
 ![n8n-sample-trace](/images/tracing_n8n.png)
 
 ![evals-fin](/images/evals_fintrack.png)
+
+I evaluated both models on ~40 transaction emails covering subscriptions, Amazon orders, bank alerts, promotions, and marketing. Sonnet 4.6 extracted every transaction and categorized 95% of them correctly, and it called tools when it should. Haiku 4.5 ran at roughly a third of the cost and twice the speed, but landed at 90% extraction and 65% categorization, and rarely reached for a tool. In a ledger a wrong category costs more than a slow one, so extraction runs on Sonnet 4.6. It cleared the cases I expected to be hard - Amazon shipped and dispatched mails, payment reminders, trial and cancelled subscriptions. It still misses on PDF-only emails, some bank alerts, and unusual merchant names, which is what the serpAPI lookup and the "Others" bucket absorb. Forty emails is a small sample, so these are directional, not guarantees. I also manually verified a few chatbot conversations by back-calculating the numbers, to confirm the answers were grounded in the data rather than invented.
 
 The dashboard offers:
 - Transaction history trends over calendar days and weeks.
@@ -52,7 +72,11 @@ Fintrack is built around that: a ledger from the emails I already receive, plus 
 
 ## Outcomes
 
-The product is [Fintrack](https://github.com/rkmagic/Fintrack). The PDF below is the full write-up: problem, workflow, agent evaluation, and screenshots. I am not running it currently because the n8n workflow needs to stay active on my laptop.
+The product is [Fintrack](https://github.com/rkmagic/Fintrack).
+
+![fintrack-dashboard](/images/dashboard_fintrack.png)
+
+It worked well for me in daily use. The ledger built itself from the inbox, spend across cards and currencies rolled up into one view, and renewals surfaced before they charged instead of after. The PDF below is the full write-up: problem, workflow, agent evaluation, and screenshots. 
 
 ## Future Work
 

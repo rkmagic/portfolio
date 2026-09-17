@@ -7,7 +7,7 @@ kind: article
 
 ## What are they?
 
-You see them every day on your device. An average user receives more than 30-40 notifications per day. On Android, notifications sit in the tray alert most people picture, but product teams often treat a whole family of surfaces as one toolkit: standard push, sticky (persistent) notifications that stay in the tray until dismissed, and FSI (full-screen intent) for high-stakes moments.
+You see them every day on your device. An average user receives more than 30-40 notifications per day. On Android, notifications sit in the tray alert most people picture, but product teams often treat a whole family of surfaces as one toolkit: standard push, sticky (persistent) notifications that stay in the tray until dismissed, and FSI (full-screen intent) for high-stakes moments. I've had the chance to experiment with all the notification options for the android device and this article is a reflection of my learnings.
 
 Android has been tightening notification rules for a while. Since Android 8 (Oreo), every notification belongs to a channel, and users can mute individual channels instead of the whole app. Since Android 13, apps must request runtime permission (`POST_NOTIFICATIONS`) before sending anything. That is a win for users and a challenge for product teams. The permission prompt can only be shown once if the user denies it, so timing matters. Opt-in rates on Android vary from 60% to 80% (much lower on iOS) and depend on app category: fintech, social, travel, entertainment, and so on.
 

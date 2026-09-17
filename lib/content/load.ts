@@ -8,6 +8,23 @@ import { mdxComponents } from "@/components/mdx-components";
 
 const contentRoot = path.join(process.cwd(), "content");
 
+/** Same-origin PDF paths under public/pdfs only (no query/hash/traversal). */
+const SAFE_PDF_URL = /^\/pdfs\/[A-Za-z0-9._\- ]+\.pdf$/;
+
+function sanitizePdfUrl(url: unknown): string | undefined {
+  if (url == null || url === "") return undefined;
+  if (typeof url !== "string" || !SAFE_PDF_URL.test(url)) {
+    throw new Error(
+      `Invalid pdfUrl (expected /pdfs/<filename>.pdf): ${String(url)}`,
+    );
+  }
+  return url;
+}
+
+function withSafePdfUrl<T extends { pdfUrl?: string }>(meta: T): T {
+  return { ...meta, pdfUrl: sanitizePdfUrl(meta.pdfUrl) };
+}
+
 /** In dev, skip the Full Route Cache so MDX edits show up without a restart. */
 function bypassCacheInDev() {
   if (process.env.NODE_ENV === "development") {
@@ -64,7 +81,7 @@ export function listProjects() {
       "utf8",
     );
     const { data } = matter(raw);
-    return { slug, meta: data as ProjectMeta };
+    return { slug, meta: withSafePdfUrl(data as ProjectMeta) };
   });
   items.sort((a, b) => byDateDesc(a.meta, b.meta));
   return items;
@@ -79,7 +96,7 @@ export function listWritings() {
       "utf8",
     );
     const { data } = matter(raw);
-    return { slug, meta: data as WritingMeta };
+    return { slug, meta: withSafePdfUrl(data as WritingMeta) };
   });
   items.sort((a, b) => byDateDesc(a.meta, b.meta));
   return items;
@@ -134,7 +151,7 @@ export async function getProject(slug: string) {
   }
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
-  const meta = data as ProjectMeta;
+  const meta = withSafePdfUrl(data as ProjectMeta);
   return {
     meta,
     content: await compileBody(content),
@@ -150,7 +167,7 @@ export async function getWriting(slug: string) {
   }
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
-  const meta = data as WritingMeta;
+  const meta = withSafePdfUrl(data as WritingMeta);
   return {
     meta,
     content: await compileBody(content),

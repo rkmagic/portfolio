@@ -96,18 +96,6 @@ export default function AboutPage() {
           something I can talk about with anyone.
         </p>
       </div>
-      <p className="mt-10">
-        <a
-          href={site.linkedInUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[var(--crawl-blue)] underline decoration-[var(--crawl-blue)]/40 underline-offset-4 hover:text-[var(--star-yellow)] hover:decoration-[var(--star-yellow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
-        >
-          LinkedIn profile
-          <span className="sr-only"> (opens in new tab)</span>
-        </a>{" "}
-        has a fuller work history.
-      </p>
       <p className="mt-8 flex flex-wrap items-center gap-3">
         <EmailLink className="inline-flex min-h-[44px] items-center rounded border border-[var(--star-yellow)] bg-[var(--star-yellow)] px-5 py-2 text-sm font-medium text-black hover:bg-[#e6b800] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]">
           Contact me
