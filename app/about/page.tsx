@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { EmailLink } from "@/components/email-contact-provider";
+import { HighlightsGrid } from "@/components/highlights-grid";
 import Link from "next/link";
 import { GalaxyTrail } from "@/components/planet-nav";
 import { PlanetKicker } from "@/components/planet-kicker";
+import { highlights } from "@/lib/highlights";
 import { planets } from "@/lib/planets";
 import { site } from "@/lib/site";
 
@@ -96,6 +98,17 @@ export default function AboutPage() {
           something I can talk about with anyone.
         </p>
       </div>
+      {highlights.length > 0 ? (
+        <section className="mt-10" aria-labelledby="highlights-heading">
+          <h2
+            id="highlights-heading"
+            className="font-[family-name:var(--font-outfit)] text-xl font-semibold text-[var(--text-primary)]"
+          >
+            Highlights
+          </h2>
+          <HighlightsGrid items={highlights} />
+        </section>
+      ) : null}
       <p className="mt-8 flex flex-wrap items-center gap-3">
         <EmailLink className="inline-flex min-h-[44px] items-center rounded border border-[var(--star-yellow)] bg-[var(--star-yellow)] px-5 py-2 text-sm font-medium text-black hover:bg-[#e6b800] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]">
           Contact me
