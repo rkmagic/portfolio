@@ -33,9 +33,9 @@ export type PlanetId = keyof typeof planets;
 
 /** Destinations you can hop between inside the galaxy (excludes home + about). */
 export const planetDestinations = [
-  planets.teardowns,
   planets.projects,
   planets.writings,
+  planets.teardowns,
 ] as const;
 
 export type PlanetDestination = (typeof planetDestinations)[number];

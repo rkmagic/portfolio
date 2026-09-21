@@ -35,28 +35,6 @@ export function HomeMain() {
 
         <div className="mt-12 grid gap-6 md:grid-cols-1 lg:grid-cols-3">
           <SectionCard
-            planet={planets.teardowns.name}
-            title={planets.teardowns.title}
-            oneLiner="Structured critiques of real products — what works, what breaks, and what I would try next."
-            href={planets.teardowns.href}
-            badge="Work in progress"
-            planetVariant="teardown"
-          >
-            <ul className="list-none space-y-1 text-[var(--text-muted)]">
-              {teardowns.map((t) => (
-                <li key={t.slug}>
-                  <Link
-                    href={`/teardowns/${t.slug}`}
-                    className="text-[var(--crawl-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
-                  >
-                    {t.meta.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </SectionCard>
-
-          <SectionCard
             planet={planets.projects.name}
             title={planets.projects.title}
             oneLiner="Case studies and side builds — context, trade-offs, and outcomes."
@@ -92,6 +70,28 @@ export function HomeMain() {
                     className="text-[var(--crawl-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
                   >
                     {w.meta.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </SectionCard>
+
+          <SectionCard
+            planet={planets.teardowns.name}
+            title={planets.teardowns.title}
+            oneLiner="Structured critiques of real products — what works, what breaks, and what I would try next."
+            href={planets.teardowns.href}
+            badge="Work in progress"
+            planetVariant="teardown"
+          >
+            <ul className="list-none space-y-1 text-[var(--text-muted)]">
+              {teardowns.map((t) => (
+                <li key={t.slug}>
+                  <Link
+                    href={`/teardowns/${t.slug}`}
+                    className="text-[var(--crawl-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
+                  >
+                    {t.meta.title}
                   </Link>
                 </li>
               ))}

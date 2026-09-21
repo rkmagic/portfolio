@@ -11,11 +11,6 @@ import { site } from "@/lib/site";
 const nav = [
   { href: planets.about.href, label: "About", planet: planets.about.name },
   {
-    href: planets.teardowns.href,
-    label: "Teardowns",
-    planet: planets.teardowns.name,
-  },
-  {
     href: planets.projects.href,
     label: "Projects",
     planet: planets.projects.name,
@@ -24,6 +19,11 @@ const nav = [
     href: planets.writings.href,
     label: "Writings",
     planet: planets.writings.name,
+  },
+  {
+    href: planets.teardowns.href,
+    label: "Teardowns",
+    planet: planets.teardowns.name,
   },
 ] as const;
 
