@@ -8,10 +8,96 @@ import { planets } from "@/lib/planets";
 import { site } from "@/lib/site";
 import { listProjects, listTeardowns, listWritings } from "@/lib/content/load";
 
+const FEATURED_WRITING_SLUGS = [
+  "effective-widgets",
+  "android-notifications",
+  "ai-workshops",
+] as const;
+
+const FEATURED_TEARDOWN_SLUGS = ["dazn", "blackboard"] as const;
+
+function splitFeaturedByCount<T>(items: T[], count: number) {
+  return {
+    featured: items.slice(0, count),
+    rest: items.slice(count),
+  };
+}
+
+function splitFeaturedBySlugs<T extends { slug: string }>(
+  items: T[],
+  featuredSlugs: readonly string[],
+) {
+  const bySlug = new Map(items.map((item) => [item.slug, item]));
+  const featured = featuredSlugs
+    .map((slug) => bySlug.get(slug))
+    .filter((item): item is T => Boolean(item));
+  const featuredSet = new Set(featured.map((item) => item.slug));
+  const rest = items.filter((item) => !featuredSet.has(item.slug));
+  return { featured, rest };
+}
+
+function PlanetLinkList({
+  featured,
+  rest,
+  hrefOf,
+}: {
+  featured: { slug: string; meta: { title: string } }[];
+  rest: { slug: string; meta: { title: string } }[];
+  hrefOf: (slug: string) => string;
+}) {
+  return (
+    <div className="space-y-3">
+      <ul className="list-none space-y-1 text-[var(--text-muted)]">
+        {featured.map((item) => (
+          <li key={item.slug}>
+            <Link
+              href={hrefOf(item.slug)}
+              className="text-[var(--crawl-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
+            >
+              {item.meta.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      {rest.length > 0 ? (
+        <details className="group">
+          <summary className="cursor-pointer list-none font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-wide text-[var(--text-muted)] marker:content-none [&::-webkit-details-marker]:hidden hover:text-[var(--star-yellow)]">
+            <span className="inline-flex items-center gap-1.5">
+              Also in orbit
+              <span
+                aria-hidden="true"
+                className="transition-transform duration-200 group-open:rotate-90"
+              >
+                ›
+              </span>
+            </span>
+          </summary>
+          <ul className="mt-2 list-none space-y-1 text-[var(--text-muted)]">
+            {rest.map((item) => (
+              <li key={item.slug}>
+                <Link
+                  href={hrefOf(item.slug)}
+                  className="text-[var(--crawl-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
+                >
+                  {item.meta.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ) : null}
+    </div>
+  );
+}
+
 export function HomeMain() {
   const teardowns = listTeardowns();
   const projects = listProjects();
   const writings = listWritings();
+
+  const shipyard = splitFeaturedByCount(projects, 3);
+  const archive = splitFeaturedBySlugs(writings, FEATURED_WRITING_SLUGS);
+  const teardown = splitFeaturedBySlugs(teardowns, FEATURED_TEARDOWN_SLUGS);
 
   return (
     <div className="relative overflow-hidden pb-20 pt-12 sm:pt-16">
@@ -41,18 +127,11 @@ export function HomeMain() {
             href={planets.projects.href}
             planetVariant="projects"
           >
-            <ul className="list-none space-y-1 text-[var(--text-muted)]">
-              {projects.map((p) => (
-                <li key={p.slug}>
-                  <Link
-                    href={`/projects/${p.slug}`}
-                    className="text-[var(--crawl-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
-                  >
-                    {p.meta.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <PlanetLinkList
+              featured={shipyard.featured}
+              rest={shipyard.rest}
+              hrefOf={(slug) => `/projects/${slug}`}
+            />
           </SectionCard>
 
           <SectionCard
@@ -62,18 +141,11 @@ export function HomeMain() {
             href={planets.writings.href}
             planetVariant="writings"
           >
-            <ul className="list-none space-y-1 text-[var(--text-muted)]">
-              {writings.slice(0, 5).map((w) => (
-                <li key={w.slug}>
-                  <Link
-                    href={`/writings/${w.slug}`}
-                    className="text-[var(--crawl-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
-                  >
-                    {w.meta.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <PlanetLinkList
+              featured={archive.featured}
+              rest={archive.rest}
+              hrefOf={(slug) => `/writings/${slug}`}
+            />
           </SectionCard>
 
           <SectionCard
@@ -83,18 +155,11 @@ export function HomeMain() {
             href={planets.teardowns.href}
             planetVariant="teardown"
           >
-            <ul className="list-none space-y-1 text-[var(--text-muted)]">
-              {teardowns.map((t) => (
-                <li key={t.slug}>
-                  <Link
-                    href={`/teardowns/${t.slug}`}
-                    className="text-[var(--crawl-blue)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
-                  >
-                    {t.meta.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <PlanetLinkList
+              featured={teardown.featured}
+              rest={teardown.rest}
+              hrefOf={(slug) => `/teardowns/${slug}`}
+            />
           </SectionCard>
         </div>
       </Container>

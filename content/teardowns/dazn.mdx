@@ -5,7 +5,9 @@ date: "2026-01-15"
 hook: "I pay for my team; the product keeps showing me everyone else’s."
 ---
 
-> **TL;DR** — DAZN has spent billions on rights, but the app treats every fan as a generic sports browser. The homepage ignores my team, live games load late, and the player makes me answer a question before I can watch. Cancelling means arguing with a chatbot. The content is the moat. Right now the product is the leak.
+> **TL;DR** — DAZN spends billions on broadcasting rights, but the app treats every fan as a generic sports browser. The homepage ignores my team, live games load late, and the player makes me answer a question before I can watch. Cancelling means arguing with a chatbot. The content is the moat. Right now the product is the leak. I'm an avid football fan, and DAZN can improve a few flows to make streaming feel seamless.
+
+My opinion only.
 
 ## Company background
 
@@ -13,7 +15,7 @@ DAZN (pronounced "da zone") launched in 2016 out of Perform Group, a UK sports-d
 
 Since then DAZN has grown into one of the largest sports-only streamers in the world. It is available in 200+ markets, and the rights it holds change by country. Examples include Serie A in Italy, LaLiga in Spain, the Bundesliga and Champions League packages in Germany, Matchroom boxing globally, NFL Game Pass internationally, and the global rights to the 2025 FIFA Club World Cup.
 
-The strategy is to buy premium live rights, become the default place fans go for them, and build more revenue on top of the subscription: betting, ticketing, merchandise and fan engagement. It is a capital-heavy bet. Sports rights are expensive, and live sport is watched in spikes, so fans sign up for a season and leave when it ends.
+The strategy is to buy premium live rights, become the default place fans go for them, and build more revenue on top of the subscription: betting, ticketing, merchandise and fan engagement. It is a capital-heavy bet. In 2024 alone DAZN spent about **$3 billion on media rights** against roughly $3.2 billion in revenue, with close to **$10 billion** still committed over the coming years ([Sportcal](https://www.sportcal.com/financial/dazn-cuts-losses-by-almost-a-third-in-2024-as-revenue-grows-once-again/)). Live sport is watched in spikes, so fans sign up for a season and leave when it ends. With close to **20 million paying subscribers** ([DAZN](https://dazngroup.com/wp-content/uploads/2024/09/DAZN_Half_Year_Review_2024_JP_15_SEPT-5.pdf)), every friction point in that loop is expensive.
 
 ## Product and business model
 
@@ -38,10 +40,16 @@ Everything else is secondary. That is the lens for this teardown. I am that user
 
 - **Rights portfolio.** When DAZN has the league you care about, there is often no legal alternative. That is real leverage.
 - **Multi-sport breadth.** For casual browsing on a weekend, the catalogue has depth across football, boxing, NFL, motorsport and niche sports.
-- **Device coverage.** It works across TV, mobile and web, and the stream quality is generally solid once playback starts.
+- **Device coverage.** It works across TV, mobile and web, and the stream quality is generally solid once playback starts. One subscription covers all devices and platforms.
 - **Intent behind FanZone.** Social watching is a good idea for live sport. Watching alone is less sticky than watching with a crowd.
 
 ## Friction points
+
+### User psyche along the customer journey of opening the app to watch a game
+
+Chart inspired by [growth.design](https://growth.design).
+
+![User psyche along the customer journey of opening the app to watch a game. Chart inspired by growth.design](/images/teardowns/dazn/user-journey.png)
 
 ### 1. The homepage is not personalized to my team
 
@@ -49,15 +57,19 @@ Everything else is secondary. That is the lens for this teardown. I am that user
 
 ![DAZN homepage: MotoGP and DAZN Bet chips, a generic LaLiga match strip, and "Best of Fútbol" highlights, with nothing tied to my team](/images/teardowns/dazn/home.jpg)
 
-**Why it matters:** The single most valuable moment in a sports app is "my team is live", and the homepage hides it behind generic editorial. Every extra scroll at kickoff is a moment of doubt about whether I am paying for the right thing.
+*My team is Manchester United and there is a game live — and I can't see it when I open the app.*
 
-**Likely reason:** Home is programmed editorially per market to promote the whole catalogue, and possibly to push rights DAZN has paid a lot for. Personalization would compete with that.
+**Why it matters:** The single most valuable moment in a sports app is "my team is live", and the homepage hides it behind generic editorial. Every extra scroll at kickoff is a moment of doubt about whether I am paying for the right thing. When a game is live, I'm filled with buzz and excitement, looking to get into the match as fast as I can — but DAZN makes me wait.
+
+This is not a niche complaint. In a [WSC Sports survey of 1,050 US fans](https://wsc-sports.com/blog/industry-insights/making-every-interaction-count-the-commercial-impact-of-personalization/), more than half had cancelled or switched a streamer because of poor personalization. Dyn, a German sports streamer, asked new subscribers one question — favorite sport — and built home around the answer. Retention jumped **35%**.
+
+**Likely reason:** Home is programmed editorially per market to promote the whole catalogue, and possibly to push rights DAZN has paid a lot for. Personalization would compete with that. If DAZN can't promise viewership on a property, they risk losing the rights next cycle.
 
 ### 2. Live games take 3–5 seconds to appear
 
 **What happens:** On launch, the page shows stale or placeholder content for several seconds before the live games load.
 
-**Why it matters:** Latency hurts most right before kickoff, and that is exactly when people open the app. A page that looks empty or out of date makes me think the stream is not live yet, or that something is broken.
+**Why it matters:** Latency hurts most right before kickoff, and that is exactly when people open the app. A page that looks empty or out of date makes me think the stream is not live yet, or that something is broken. A few seconds sounds small, but fans notice. In a [Stats Perform survey of 1,000 NFL fans](https://www.statsperform.com/insights/super-bowl-live-streaming-experience/), **26%** said delays under five seconds already frustrate them, and **83%** said they would likely switch platforms if their stream felt delayed.
 
 **Likely reason:** Live status is fetched after the page shell renders, with no cached or optimistic state and no clear loading state for the live rail.
 
@@ -81,9 +93,17 @@ Everything else is secondary. That is the lens for this teardown. I am that user
 
 **What happens:** There is no cancel button. To end the subscription, you have to go through a support chatbot.
 
-**Why it matters:** This is a retention dark pattern. It may lower cancellations in the short term, but it burns trust at the exact moment a seasonal subscriber decides whether they will come back next season. Many European markets are also moving toward "cancel as easily as you signed up" rules; Germany, for example, has required a cancellation button for online subscriptions since 2022.
+**Why it matters:** This is a retention dark pattern. It may lower cancellations in the short term, but it burns trust at the exact moment a seasonal subscriber decides whether they will come back next season. That frustration shows up everywhere public reviews live: looping chatbots, repeated retention offers, and a 30-day notice period that often triggers one more charge after someone has already cancelled. Many European markets are also moving toward "cancel as easily as you signed up" rules; Germany, for example, has required a cancellation button for online subscriptions since 2022.
 
 **Likely reason:** Churn is measured as a number to minimize, not as a relationship to manage.
+
+### 6. Ads on a paid subscription
+
+**What happens:** Despite paying ~€20 a month, I get an ad when I launch a game. It makes me question why I am paying if I still sit through commercials.
+
+**Why it matters:** Paying subscribers on Reddit and the Play Store describe the same thing — 15–30 second unskippable ads before a game, and again every time they switch matches — and many name the ads as why they cancelled ([example](https://www.reddit.com/r/dazn_ca/comments/17mic1g/commercials_lead_to_cancel/)). The Android app's store rating looks fine in the US (~4.5★), but drops to roughly **3.2★ in Spain** and **3.6★ in Germany**, two of DAZN's biggest football markets. Across ~63,000 written reviews, the average sits closer to **2.2★**, with ads, loading, and cancellation as recurring themes ([MWM](https://mwm.ai/apps/dazn-stream-live-sports/1129523589)).
+
+**Likely reason:** Rights costs create pressure to layer ad revenue on top of subscriptions. That may help the P&L, but it leaves a paying fan feeling double-charged.
 
 ## Product principles DAZN should hold itself to
 
