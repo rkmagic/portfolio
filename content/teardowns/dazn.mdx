@@ -1,0 +1,115 @@
+---
+title: "DAZN"
+description: "A global sports streamer with world-class rights and a product that keeps getting between the fan and their team."
+date: "2026-01-15"
+hook: "I pay for my team; the product keeps showing me everyone else’s."
+---
+
+> **TL;DR** — DAZN has spent billions on rights, but the app treats every fan as a generic sports browser. The homepage ignores my team, live games load late, and the player makes me answer a question before I can watch. Cancelling means arguing with a chatbot. The content is the moat. Right now the product is the leak.
+
+## Company background
+
+DAZN (pronounced "da zone") launched in 2016 out of Perform Group, a UK sports-data and media business owned by Len Blavatnik's Access Industries. The first markets were Germany, Austria, Switzerland and Japan, and the pitch was simple: a "Netflix for sports", with live matches over the internet and no cable bundle.
+
+Since then DAZN has grown into one of the largest sports-only streamers in the world. It is available in 200+ markets, and the rights it holds change by country. Examples include Serie A in Italy, LaLiga in Spain, the Bundesliga and Champions League packages in Germany, Matchroom boxing globally, NFL Game Pass internationally, and the global rights to the 2025 FIFA Club World Cup.
+
+The strategy is to buy premium live rights, become the default place fans go for them, and build more revenue on top of the subscription: betting, ticketing, merchandise and fan engagement. It is a capital-heavy bet. Sports rights are expensive, and live sport is watched in spikes, so fans sign up for a season and leave when it ends.
+
+## Product and business model
+
+- **Subscription tiers** that differ by market, usually monthly vs annual commitment and sometimes a "Standard" vs "Unlimited" split.
+- **Pay-per-view** on top of the subscription for big boxing events.
+- **Adjacent revenue:** DAZN Bet in some markets, merchandise, and FanZone (live chat, polls and predictions during games) as an engagement layer.
+- **Platforms:** web, iOS, Android, smart TVs, consoles and streaming sticks.
+
+That model means DAZN's economics depend on two things: **retention between big events** and **engagement during them**. Both come down to how quickly a fan gets from opening the app to watching their game.
+
+## Who it is for
+
+The core user is not a "sports fan" in the abstract. It is someone who follows **one team, one league, or one sport** and subscribes because of it. Their jobs to be done are narrow and urgent:
+
+1. "My team is playing, get me into the live game now."
+2. "I missed it, show me highlights or a replay of my team."
+3. "When is the next game?"
+
+Everything else is secondary. That is the lens for this teardown. I am that user.
+
+## What works
+
+- **Rights portfolio.** When DAZN has the league you care about, there is often no legal alternative. That is real leverage.
+- **Multi-sport breadth.** For casual browsing on a weekend, the catalogue has depth across football, boxing, NFL, motorsport and niche sports.
+- **Device coverage.** It works across TV, mobile and web, and the stream quality is generally solid once playback starts.
+- **Intent behind FanZone.** Social watching is a good idea for live sport. Watching alone is less sticky than watching with a crowd.
+
+## Friction points
+
+### 1. The homepage is not personalized to my team
+
+**What happens:** I cannot set my team so that my sport and my matches lead the homepage. When my team is playing, the home rails still push other sports and other games.
+
+![DAZN homepage: MotoGP and DAZN Bet chips, a generic LaLiga match strip, and "Best of Fútbol" highlights, with nothing tied to my team](/images/teardowns/dazn/home.jpg)
+
+**Why it matters:** The single most valuable moment in a sports app is "my team is live", and the homepage hides it behind generic editorial. Every extra scroll at kickoff is a moment of doubt about whether I am paying for the right thing.
+
+**Likely reason:** Home is programmed editorially per market to promote the whole catalogue, and possibly to push rights DAZN has paid a lot for. Personalization would compete with that.
+
+### 2. Live games take 3–5 seconds to appear
+
+**What happens:** On launch, the page shows stale or placeholder content for several seconds before the live games load.
+
+**Why it matters:** Latency hurts most right before kickoff, and that is exactly when people open the app. A page that looks empty or out of date makes me think the stream is not live yet, or that something is broken.
+
+**Likely reason:** Live status is fetched after the page shell renders, with no cached or optimistic state and no clear loading state for the live rail.
+
+### 3. A confirmation dialog before a live game
+
+**What happens:** When I open a game that is live, I have to choose "start from beginning" or "go live" before playback starts.
+
+**Why it matters:** For a live match the overwhelming default intent is "go live". The dialog makes every user pay a tax on every live session to serve a minority use case. It also adds a step at the exact moment I am most impatient.
+
+**Likely reason:** A catch-up feature was added and the team avoided choosing a default. The dialog is a safe choice for the team, not for the user.
+
+### 4. FanZone keeps popping up
+
+**What happens:** The FanZone panel keeps surfacing and takes focus from the game, even though I have not engaged with it.
+
+**Why it matters:** An engagement feature that interrupts the thing people came for erodes the core experience. It also teaches users to dismiss prompts on reflex, which makes future features harder to introduce.
+
+**Likely reason:** FanZone probably has its own engagement targets, and pushing exposure is the fastest way to hit them.
+
+### 5. Cancellation only through a chatbot
+
+**What happens:** There is no cancel button. To end the subscription, you have to go through a support chatbot.
+
+**Why it matters:** This is a retention dark pattern. It may lower cancellations in the short term, but it burns trust at the exact moment a seasonal subscriber decides whether they will come back next season. Many European markets are also moving toward "cancel as easily as you signed up" rules; Germany, for example, has required a cancellation button for online subscriptions since 2022.
+
+**Likely reason:** Churn is measured as a number to minimize, not as a relationship to manage.
+
+## Product principles DAZN should hold itself to
+
+1. **My team first.** The product should know who I support and organize itself around that.
+2. **Live means now.** Getting from opening the app to watching live should be as short as possible. No dialogs, no stale screens.
+3. **Engagement is earned, not forced.** Social and fan features belong around the game, never on top of it.
+4. **Leaving should be as easy as joining.** Seasonal fans will come back if they leave on good terms.
+
+## If I were the PM
+
+In priority order:
+
+1. **Team onboarding and a team-first home.** Ask for favorite teams and sports at signup, with an option to edit in settings. Rank home as: my team live → my team upcoming → my league → everything else. Pin a "your team is live" hero card when a match is on.
+2. **Default to live, with catch-up as a secondary action.** Start live playback immediately for live events, and put "watch from beginning" as a button in the player. No blocking dialog.
+3. **Fix perceived live latency.** Cache the last known live state and render it right away, then refresh it. Use a clear skeleton for the live rail instead of stale content. Put a performance budget on how long the live rail takes to appear.
+4. **Make FanZone opt-in.** Show it as a tab or side panel the user opens, remember dismissals, and never auto-expand it over playback.
+5. **Add a cancel button in account settings.** Offer a pause or downgrade option and a single retention offer on the way out, and keep the chatbot for help, not as a gate.
+
+## How I would measure success
+
+- **Time to live playback** from app launch, especially in the 15 minutes around kickoff.
+- **Share of sessions that reach my team's content** without searching.
+- **Dialog removal impact:** live playback starts per session before and after the change.
+- **FanZone opt-in rate and retention** among users who choose it, instead of raw impressions.
+- **Win-back rate** among cancelled users next season, measured next to churn rate so trust is visible in the numbers.
+
+## Key takeaway
+
+DAZN already won the hard part by securing the rights. Its job now is to get out of the way: know my team, get me into the live game immediately, and let me leave without a fight. For a seasonal product, how easily someone can leave today decides whether they come back next season.

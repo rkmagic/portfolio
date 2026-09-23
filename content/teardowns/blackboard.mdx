@@ -1,30 +1,112 @@
 ---
-title: "Learning platform (placeholder)"
-description: "Dummy teardown — replace with real analysis."
+title: "Blackboard"
+description: "The original learning management system. It covers every academic workflow but still struggles with the most basic one: getting to what you are learning right now."
 date: "2026-02-01"
-hook: "Placeholder hook for an LMS-style product."
+hook: "A learning platform that treats every visit like a security clearance."
 ---
 
-## Product overview
+> **TL;DR** — Blackboard supports nearly every academic workflow, but daily use feels like a chore. The experience is web-first and clunky, sessions expire every few days, and your current courses sit several clicks deep. An LMS should optimize for one thing: fast, reliable access to what you are learning and teaching right now.
 
-Consectetur adipiscing elit sed do eiusmod tempor. Replace with a concise description of the product and who it serves.
+## Company background
+
+Blackboard was founded in 1997 in Washington, D.C. by Michael Chasen and Matthew Pittinsky, and it more or less defined the learning management system (LMS) category. Through the 2000s it grew by acquisition, buying rivals such as WebCT and Angel Learning, and became the default platform for universities around the world.
+
+It was taken private by Providence Equity Partners in 2011, and in 2021 it merged with Anthology to form a broader edtech suite covering the LMS, student information systems, CRM and analytics. Its flagship product is **Blackboard Learn**, which has been moving from the older "Original" experience to the redesigned **Learn Ultra**. It also has a companion mobile app.
+
+The category has become much more competitive. **Canvas** (Instructure) won a lot of North American market share with a cleaner, more modern product. **Moodle** dominates the open-source and budget segment, and **D2L Brightspace** competes strongly in higher education and K-12. Blackboard's advantage is its installed base and deep institutional integrations, not how much people enjoy using it.
+
+## Product and business model
+
+- **B2B2C:** institutions buy it and students and faculty use it. The buyer, usually IT and procurement, is not the daily user.
+- **Revenue:** multi-year institutional licenses, often combined with hosting, integrations and other Anthology products.
+- **Core surface:** courses, content and documents, assignments and submissions, grades, announcements, discussions, and integrations like Zoom, plagiarism checkers and SSO.
+
+That buyer/user split explains a lot. Deals are won on features, compliance and integration checklists. Daily usability is felt by students and professors, who rarely sit in the procurement meeting.
+
+## Who it is for
+
+There are three user groups with different jobs:
+
+1. **Students:** "What do I need to read, submit or know this week, and how am I doing?"
+2. **Professors:** "Get my materials out, collect work, grade it, and tell everyone what changed."
+3. **Academic program staff:** "Keep cohorts informed, track progress, and handle exceptions."
+
+All three share one need: **fast access to what is current, and confidence that the information is up to date.**
 
 ## What works
 
-- Placeholder strength one.
-- Placeholder strength two.
-- Placeholder strength three.
+- **One institutional hub.** Coursework, grades and communication live in one place instead of scattered emails and drives.
+- **Workflow breadth.** Assignments, rubrics, grade centers, discussions, groups and integrations are all there. Almost any academic process can run on it.
+- **Institutional fit.** SSO, compliance, accessibility commitments and integrations with student systems are why universities choose it.
+- **Once you are inside a course,** the core objects (documents, assignments, grades) are generally where you would expect them.
 
-## What does not work
+## Friction points
 
-- Placeholder gap one.
-- Placeholder gap two.
+### 1. Web-first UI that feels dated and heavy
+
+**What happens:** The experience feels like a legacy web app. Even on mobile it behaves like a wrapped website rather than a native product, with dense layouts, small targets and inconsistent navigation.
+
+**Why it matters:** Students check coursework in short moments, often on a phone between classes. A heavy UI makes those quick checks feel expensive, so people check less often and miss updates.
+
+**Likely reason:** Decades of accumulated features and a long, partial move from Original to Ultra. Institutions often run a mix of both.
+
+### 2. Logged out every few days
+
+**What happens:** I have to log in again every few days, sometimes with SSO and MFA each time.
+
+**Why it matters:** This is a learning platform, not a banking app. Grades and assignments are sensitive, but the constant re-login adds friction to every visit and pushes students to download everything and work offline, away from the platform.
+
+**Likely reason:** Session length is often set by the institution's SSO policy rather than by Blackboard itself. But the product ships defaults and influences how institutions configure it. It could separate a low-risk "view" session from step-up authentication for sensitive actions.
+
+### 3. Courses buried behind multiple clicks
+
+**What happens:** Getting to the course I am currently taking takes several clicks through institution pages, course lists and menus.
+
+**Why it matters:** "My current course" is the most common destination in the product, and it is not the default. Every visit starts with navigation.
+
+**Likely reason:** The information architecture is organized around the institution (terms, organizations, all enrolled courses) instead of around the user's current week.
+
+### 4. Clunky interactions and click delay
+
+**What happens:** Clicks often lag, and pages load in pieces. The app feels slow even on a good connection.
+
+**Why it matters:** Perceived slowness compounds with deep navigation. Five clicks with a delay on each is enough to make people avoid the product.
+
+**Likely reason:** Heavy page loads, lots of third-party integrations, and no visible performance budget for common paths.
+
+### 5. Communication is fragmented
+
+**What happens:** Announcements, discussion boards, messages and email notifications overlap. It is not always clear where the source of truth is, or whether something is still current.
+
+**Why it matters:** When students do not trust the LMS to be up to date, they fall back to WhatsApp groups and email. Professors and staff then repeat themselves across channels.
+
+## Product principles for a learning platform
+
+1. **Easy access to what you are currently learning.** Documents, grades and assignments for active courses should be one or two taps from opening the app.
+2. **Easy channels to communicate.** Students, professors and program staff should reach each other directly without hunting through menus.
+3. **Up-to-date information for everyone.** Deadlines, announcements and grades should be visibly fresh for learners and for the staff who act on them.
+4. **Low friction for low-risk actions.** Reading a syllabus should not need the same security as changing a grade.
 
 ## If I were the PM
 
-- Placeholder initiative one.
-- Placeholder initiative two.
+In priority order:
+
+1. **Make home about the current week.** The default landing page should show this week's courses, upcoming deadlines, new grades and unread announcements in one view. Current courses should be pinned, and past terms archived out of the way.
+2. **Use risk-based sessions.** Keep users signed in for weeks for viewing and submitting, and require step-up authentication only for sensitive actions like grade changes or personal data. Give institutions a recommended default.
+3. **Cut navigation depth.** Add a persistent course switcher and deep links from notifications straight to the item. Track time to current course as a top-level product metric.
+4. **Set a performance budget for core paths.** Opening the app, opening a course, opening an assignment and checking a grade should each feel instant. Treat regressions as bugs.
+5. **Create one communication inbox per course.** Merge announcements, messages and discussion replies into a single feed with read state, so professors post once and students can trust it.
+6. **Make the mobile app native where it counts.** Build the dashboard, notifications, grades and submissions natively, and keep web views for long-tail features.
+
+## How I would measure success
+
+- **Time to current course** from app open, with a target of under two taps.
+- **Weekly active students per course**, and how often students check in during a week.
+- **Re-authentication prompts per user per month.**
+- **Response time on core actions** such as opening a course or checking a grade.
+- **Announcement read rate** and a drop in "did you see my email?" follow-ups from faculty.
+- **Faculty and student satisfaction** surveyed separately, since the institutional buyer's satisfaction does not show whether the product works for daily users.
 
 ## Key takeaway
 
-Placeholder one-liner for the core insight.
+Blackboard's challenge is not missing features. It is that the product serves the institution's structure instead of the learner's week. An LMS wins on time to current course and trust that the information is fresh, not on feature checklists or bank-level security between a student and their syllabus.
