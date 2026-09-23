@@ -81,7 +81,6 @@ export function HomeMain() {
             title={planets.teardowns.title}
             oneLiner="Structured critiques of real products — what works, what breaks, and what I would try next."
             href={planets.teardowns.href}
-            badge="Work in progress"
             planetVariant="teardown"
           >
             <ul className="list-none space-y-1 text-[var(--text-muted)]">
