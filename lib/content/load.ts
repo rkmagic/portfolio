@@ -46,7 +46,14 @@ export function getTeardownSlugs() {
 }
 
 export function getProjectSlugs() {
-  return readDir("projects");
+  return readDir("projects").filter((slug) => {
+    const raw = fs.readFileSync(
+      path.join(contentRoot, "projects", `${slug}.mdx`),
+      "utf8",
+    );
+    const { data } = matter(raw);
+    return !(data as ProjectMeta).draft;
+  });
 }
 
 export function getWritingSlugs() {
@@ -152,6 +159,9 @@ export async function getProject(slug: string) {
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
   const meta = withSafePdfUrl(data as ProjectMeta);
+  if (meta.draft) {
+    throw new Error("Not found");
+  }
   return {
     meta,
     content: await compileBody(content),

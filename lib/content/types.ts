@@ -11,6 +11,8 @@ export type ProjectMeta = {
   date: string;
   company: string;
   outcome: string;
+  /** When true, excluded from listings, sitemap, and public routes. */
+  draft?: boolean;
   /** Optional path under public/, e.g. /pdfs/spend-management.pdf */
   pdfUrl?: string;
   /** Optional thumbnail under public/, e.g. /images/fintrack.png */
