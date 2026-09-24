@@ -7,7 +7,7 @@ kind: article
 
 ## What are they?
 
-You see them every day on your device. An average user receives more than 30-40 notifications per day. On Android, notifications sit in the tray alert most people picture, but product teams often treat a whole family of surfaces as one toolkit: standard push, sticky (persistent) notifications that stay in the tray until dismissed, and FSI (full-screen intent) for high-stakes moments. I've had the chance to experiment with all the notification options for the android device and this article is a reflection of my learnings.
+You see them every day on your device. An average user receives more than 30-40 notifications per day. On Android, notifications sit in the tray most people picture, but product teams often treat a whole family of surfaces as one toolkit: standard push, sticky (persistent) notifications that stay in the tray until dismissed, and FSI (full-screen intent) for high-stakes moments. I've had the chance to experiment with all the notification options for the Android device and this article is a reflection of my learnings.
 
 Android has been tightening notification rules for a while. Since Android 8 (Oreo), every notification belongs to a channel, and users can mute individual channels instead of the whole app. Since Android 13, apps must request runtime permission (`POST_NOTIFICATIONS`) before sending anything. That is a win for users and a challenge for product teams. The permission prompt can only be shown once if the user denies it, so timing matters. Opt-in rates on Android vary from 60% to 80% (much lower on iOS) and depend on app category: fintech, social, travel, entertainment, and so on.
 
@@ -37,7 +37,7 @@ Products continue to optimize notifications and get the most from this channel d
 
 **Cohort, don't broadcast.** The same notification sent to everyone burns out fast. Power users can absorb more volume; dormant users need less, more relevant volume. Undifferentiated sends are the biggest driver of fatigue. Content type matters too: one user may want sports updates but not weather. AI-driven personalization is now close to standard. Personalization can apply across time of day, day of week, onboarding preferences, and more.
 
-**Check the integration end-to-end.** Delivery rate shows how many users actually received your notifications. Integration issues can drag it down: the push ID may not register correctly, or the notification SDK may fail to initialize. Broken deeplinks also hurt UX. Notifications behave differently depending on the OS (even custom android OS) and OEM so a thorough review across devices is a must.
+**Check the integration end-to-end.** Delivery rate shows how many users actually received your notifications. Integration issues can drag it down: the push ID may not register correctly, or the notification SDK may fail to initialize. Broken deeplinks also hurt UX. Notifications behave differently depending on the OS (even custom Android OS) and OEM, so a thorough review across devices is a must.
 
 **Win the tray, not just the send.** Notifications compete with every other app for the same space. Small design changes move clicks: a clear CTA, images when useful, sharper copy, A/B tests across cohorts can improve CTRs incrementally. Even without a click, view-through attribution can still win the user. Sticky notifications work well for real-time use cases like tracking an Uber driver or counting down to a ticket release. Do not use deceptive copy or spam users; once trust breaks, it is hard to recover.
 

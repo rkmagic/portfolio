@@ -13,19 +13,19 @@ function resolveSiteUrl() {
 export const site = {
   name: "Rishi",
   title: "Rishi — Product Manager",
-  tagline: "Product Manager | AI-Native | Empathy",
-  headline: "Shaping the next generation of digital products.",
+  tagline: "Product Manager | Consumer Mobile Products | AI-Native",
+  headline: "I think by building.",
   description:
-    "I love building 0-to-1 products particularly AI-native ones. Here, you will find a breakdown of my process, my builds, and my learnings from the past.",
+    "When I'm not sure, I build the smallest version and let it answer. Every artefact below shows what I tried, what broke, and what I kept.",
   url: resolveSiteUrl(),
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "rishi38199@gmail.com",
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "rishikashyap.work@gmail.com",
   linkedInUrl:
     process.env.NEXT_PUBLIC_LINKEDIN_URL ??
     "https://www.linkedin.com/in/rishikashyap01/",
   githubUrl: process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/rkmagic",
   blogUrl: process.env.NEXT_PUBLIC_BLOG_URL ?? "https://kolli.vercel.app/",
   /** Served from `public/pdfs/` */
-  resumeUrl: "/pdfs/Rishi Kashyap_CV_12_Sep.pdf",
+  resumeUrl: "/pdfs/Rishi_Kashyap_CV.pdf",
   resumeDownloadName: "Rishi-Kashyap-CV.pdf",
   /** Digits only, country code included (no +). Used for wa.me links. */
   whatsappNumber:

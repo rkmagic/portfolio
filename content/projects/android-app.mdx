@@ -9,7 +9,7 @@ pdfUrl: "/pdfs/dormia-app.pdf"
 
 ## Context
 
-Having worked on mobile apps for a long time, this challenge felt like home. We built it for a Tech Challenge run by my university's Google Developers Club and reached the [final](https://www.linkedin.com/posts/vaibhavtyagi8_gdgoncampus-buildwithai-techroulette-activity-7455253555768340482-xxpZ) hosted at Google's Madrid office (with MBA peers Vaibhav Tyagi and Patricio Villar).
+After years of working on mobile apps, this challenge felt like home. We built it for a Tech Challenge run by my university's Google Developers Club and reached the [final](https://www.linkedin.com/posts/vaibhavtyagi8_gdgoncampus-buildwithai-techroulette-activity-7455253555768340482-xxpZ) hosted at Google's Madrid office (with MBA peers Vaibhav Tyagi and Patricio Villar).
 
 A gamified sleep product where going to bed on time is the sport. The web app owns leagues, leaderboards, the live world map, and Gemini-written "obituaries" when a streak dies. The Android app is the companion that makes the sport hard to cheat: it verifies sleep on-device and pushes presence into the same Firebase project the web reads.
 
@@ -42,7 +42,7 @@ On Android the job was narrow but non-negotiable:
 - Detect location (GPS first, IP fallback) so the live map can place the player by city / country / continent
 - Keep field names aligned with the web client so sleep state and presence update in near real time.
 
-Firebase is at the core of this application and its amazing how real-time database works.
+Firebase sits at the core: its real-time sync is what lets the web leaderboard reflect a player falling asleep within seconds.
 
 Permissions were part of the product, not an afterthought: activity recognition, location, notifications (Android 13+), and a foreground service for continuous tracking. Without them, automatic detection collapses. Below is a screenshot of real-time data tracking from the app, with manual buttons for quick testing.
 

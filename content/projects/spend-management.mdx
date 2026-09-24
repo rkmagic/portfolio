@@ -5,6 +5,7 @@ date: "2026-05-16"
 company: "Personal"
 outcome: "Shipped Fintrack: n8n + Claude ingest inbox spend into a smart dashboard on Vercel."
 pdfUrl: "/pdfs/spend-management.pdf"
+coverImage: "/images/featured/fintrack.png"
 ---
 
 ## Context
@@ -40,13 +41,13 @@ The solution needed to be end-to-end: ingest the data, write it to a database, a
 Architecture:
 ![workflow-architecture](/images/architecture.jpg)
 
-Getting n8n outputs into the right formats took time. Even with a robust prompt, Haiku 4.5 and Sonnet 4.6 sometimes failed to follow it fully, so I added code-snippet guardrails. I spotted failures in the n8n traces, which resulted in these deterministic blocks. In a production system, observability tools like LangChain or MLflow would make this easier.
+Getting n8n outputs into the right formats took time. Even with a robust prompt, Haiku 4.5 and Sonnet 4.6 sometimes failed to follow it fully, so I added code-snippet guardrails. I spotted failures in the n8n traces, which resulted in these deterministic blocks. In a production system, observability tools like LangSmith or MLflow would make this easier.
 
 ![n8n-sample-trace](/images/tracing_n8n.png)
 
 ![evals-fin](/images/evals_fintrack.png)
 
-I evaluated both models on ~40 transaction emails covering subscriptions, Amazon orders, bank alerts, promotions, and marketing. Sonnet 4.6 extracted every transaction and categorized 95% of them correctly, and it called tools when it should. Haiku 4.5 ran at roughly a third of the cost and twice the speed, but landed at 90% extraction and 65% categorization, and rarely reached for a tool. In a ledger a wrong category costs more than a slow one, so extraction runs on Sonnet 4.6. It cleared the cases I expected to be hard - Amazon shipped and dispatched mails, payment reminders, trial and cancelled subscriptions. It still misses on PDF-only emails, some bank alerts, and unusual merchant names, which is what the serpAPI lookup and the "Others" bucket absorb. Forty emails is a small sample, so these are directional, not guarantees. I also manually verified a few chatbot conversations by back-calculating the numbers, to confirm the answers were grounded in the data rather than invented.
+I evaluated both models on ~40 transaction emails covering subscriptions, Amazon orders, bank alerts, promotions, and marketing. Sonnet 4.6 extracted every transaction and categorized 95% of them correctly, and it called tools when it should. Haiku 4.5 ran at roughly a third of the cost and twice the speed, but landed at 90% extraction and 65% categorization, and rarely reached for a tool. In a ledger a wrong category costs more than a slow one, so extraction runs on Sonnet 4.6. It cleared the cases I expected to be hard - Amazon shipped and dispatched mails, payment reminders, trial and cancelled subscriptions. It still misses on PDF-only emails, some bank alerts, and unusual merchant names, which is what the SerpAPI lookup and the "Others" bucket absorb. Forty emails is a small sample, so these are directional, not guarantees. I also manually verified a few chatbot conversations by back-calculating the numbers, to confirm the answers were grounded in the data rather than invented.
 
 The dashboard offers:
 - Transaction history trends over calendar days and weeks.
@@ -59,12 +60,12 @@ The dashboard offers:
 - Connects to Gmail to extract spend from text, PDFs, or HTML (some companies render custom HTML in emails).
 - Uses rule-based logic wherever possible. Database writes are risky, so AI output is verified with gates like IF nodes in n8n.
 - Supports updates to existing subscriptions or transactions.
-- Uses an AI agent with serpAPI to Google-search ambiguous merchant names for better categorization. Unresolved merchants go to "Others". Categorization includes a confidence score that can be tuned.
-- Resolves and cleans canonical names (e.g. Spotify AB, or tags like Anthropic,pbc).
+- Uses an AI agent with SerpAPI to Google-search ambiguous merchant names for better categorization. Unresolved merchants go to "Others". Categorization includes a confidence score that can be tuned.
+- Resolves and cleans canonical names (e.g. Spotify AB, or tags like Anthropic, PBC).
 
-**Stack:** n8n, Claude, serpAPI, Supabase, Next.js, Vercel
+**Stack:** n8n, Claude, SerpAPI, Supabase, Next.js, Vercel
 
-### Don't fintech products like Apple Pay / Revolut already do this?
+### Don't apps like Apple Pay / Revolut already do this?
 
 They do a version of this on their own rails: statements, some categories, and a filter box. That falls short for questions like "how much did I spend on coffee this quarter?" Other SaaS tools exist for subscriptions, but this dashboard is customized to my preferences. Sometimes people use a different payment option like a forex card, for example, and visibility disappears. This workflow also researches merchants that are unfamiliar.
 
@@ -76,7 +77,7 @@ The product is [Fintrack](https://github.com/rkmagic/Fintrack).
 
 ![fintrack-dashboard](/images/dashboard_fintrack.png)
 
-It worked well for me in daily use. The ledger built itself from the inbox, spend across cards and currencies rolled up into one view, and renewals surfaced before they charged instead of after. The PDF below is the full write-up: problem, workflow, agent evaluation, and screenshots. 
+It worked well for me in daily use. The ledger built itself from the inbox, spend across cards and currencies rolled up into one view, and renewals surfaced before they charged instead of after. The PDF below is the full write-up: problem, workflow, agent evaluation, and screenshots.
 
 ## Future Work
 

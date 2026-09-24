@@ -31,12 +31,20 @@ export const highlightKindLabels: Record<HighlightKind, string> = {
  */
 export const highlights: Highlight[] = [
   {
-    kind: "certificate",
-    title: "McKinsey Forward",
+    kind: "award",
+    title: "Climate Tech Competition — 1st Place",
     description:
-      "Completed the McKinsey Forward programme — consulting frameworks and best practices.",
-    mediaSrc: "/highlights/McKinsey_Forward.pdf",
-    mediaType: "pdf",
+      "1st place, IE Climate Tech Lab. Built the commercialization plan for a deep-tech startup recovering platinum group metals from spent catalytic converters. Owned business model design from value proposition through go-to-market.",
+    mediaSrc: "/highlights/Climate_tech_Rishi%20Kashyap.png",
+    mediaType: "image",
+  },
+  {
+    kind: "award",
+    title: "Beta Gamma Sigma",
+    description:
+      "Top 20% of the MBA class. Honor society of AACSB-accredited business schools.",
+    mediaSrc: "/highlights/bgs.png",
+    mediaType: "image",
   },
   {
     kind: "recommendation",
@@ -47,19 +55,11 @@ export const highlights: Highlight[] = [
     mediaType: "pdf",
   },
   {
-    kind: "award",
-    title: "Climate Tech Competition — 1st Place",
+    kind: "certificate",
+    title: "McKinsey Forward",
     description:
-      "Won first place building a commercialization plan for a deep tech project.",
-    mediaSrc: "/highlights/Climate_tech_Rishi%20Kashyap.png",
-    mediaType: "image",
-  },
-  {
-    kind: "award",
-    title: "Beta Gamma Sigma",
-    description:
-      "Awarded for being in the top 20%. Community of triple-accredited business schools worldwide.",
-    mediaSrc: "/highlights/bgs.png",
-    mediaType: "image",
+      "Completed the McKinsey Forward programme — consulting frameworks and best practices.",
+    mediaSrc: "/highlights/McKinsey_Forward.pdf",
+    mediaType: "pdf",
   },
 ];

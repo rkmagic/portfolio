@@ -121,13 +121,30 @@
   animation: star-twinkle 4.5s ease-in-out infinite;
 }
 
+@keyframes scroll-nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+
+.motion-safe\:animate-scroll-nudge {
+  animation: scroll-nudge 1.6s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .motion-safe\:animate-warp-flash,
   .motion-safe\:animate-intro-caption,
   .motion-safe\:animate-droid-bob,
   .motion-safe\:animate-droid-antenna,
   .motion-safe\:animate-droid-eye,
-  .motion-safe\:animate-star-twinkle {
+  .motion-safe\:animate-star-twinkle,
+  .motion-safe\:animate-scroll-nudge {
     animation: none !important;
   }
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { FeaturedSection } from "@/components/featured-section";
 import { GalaxyBackdrop } from "@/components/galaxy-backdrop";
 import { HeroDroid } from "@/components/hero-droid";
 import { PlanetKicker } from "@/components/planet-kicker";
@@ -9,7 +10,7 @@ import { site } from "@/lib/site";
 import { listProjects, listTeardowns, listWritings } from "@/lib/content/load";
 
 const FEATURED_WRITING_SLUGS = [
-  "effective-widgets",
+  "effective-client-relations",
   "android-notifications",
   "ai-workshops",
 ] as const;
@@ -116,52 +117,82 @@ export function HomeMain() {
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--text-primary)]">
               {site.description}
             </p>
+            <a
+              href="#featured"
+              className="mt-8 flex flex-col items-center gap-1 text-[var(--text-muted)] md:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)]"
+              aria-label="Scroll to selected work"
+            >
+              <span className="font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-wider">
+                Scroll
+              </span>
+              <span
+                aria-hidden="true"
+                className="motion-safe:animate-scroll-nudge text-2xl leading-none text-[var(--crawl-blue)]"
+              >
+                ↓
+              </span>
+            </a>
           </div>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-1 lg:grid-cols-3">
-          <SectionCard
-            planet={planets.projects.name}
-            title={planets.projects.title}
-            oneLiner="Case studies and side builds — context, trade-offs, and outcomes."
-            href={planets.projects.href}
-            planetVariant="projects"
-          >
-            <PlanetLinkList
-              featured={shipyard.featured}
-              rest={shipyard.rest}
-              hrefOf={(slug) => `/projects/${slug}`}
-            />
-          </SectionCard>
+        <FeaturedSection />
 
-          <SectionCard
-            planet={planets.writings.name}
-            title={planets.writings.title}
-            oneLiner="Articles with product learnings, plus PDF decks from workshops and MBA work."
-            href={planets.writings.href}
-            planetVariant="writings"
+        <section
+          id="all-artefacts"
+          className="mt-16 border-t border-[var(--card-border)] pt-12"
+          aria-labelledby="all-artefacts-heading"
+        >
+          <PlanetKicker>Browse</PlanetKicker>
+          <h2
+            id="all-artefacts-heading"
+            className="mt-2 font-[family-name:var(--font-outfit)] text-2xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            <PlanetLinkList
-              featured={archive.featured}
-              rest={archive.rest}
-              hrefOf={(slug) => `/writings/${slug}`}
-            />
-          </SectionCard>
+            All Artefacts
+          </h2>
+          <div className="mt-6 grid gap-6 md:grid-cols-1 lg:grid-cols-3">
+            <SectionCard
+              planet={planets.projects.name}
+              title={planets.projects.title}
+              oneLiner="Case studies and side builds — context, trade-offs, and outcomes."
+              href={planets.projects.href}
+              planetVariant="projects"
+            >
+              <PlanetLinkList
+                featured={shipyard.featured}
+                rest={shipyard.rest}
+                hrefOf={(slug) => `/projects/${slug}`}
+              />
+            </SectionCard>
 
-          <SectionCard
-            planet={planets.teardowns.name}
-            title={planets.teardowns.title}
-            oneLiner="Structured critiques of real products — what works, what breaks, and what I would try next."
-            href={planets.teardowns.href}
-            planetVariant="teardown"
-          >
-            <PlanetLinkList
-              featured={teardown.featured}
-              rest={teardown.rest}
-              hrefOf={(slug) => `/teardowns/${slug}`}
-            />
-          </SectionCard>
-        </div>
+            <SectionCard
+              planet={planets.writings.name}
+              title={planets.writings.title}
+              oneLiner="Articles with product learnings, plus PDF decks from workshops and MBA work."
+              href={planets.writings.href}
+              planetVariant="writings"
+            >
+              <PlanetLinkList
+                featured={archive.featured}
+                rest={archive.rest}
+                hrefOf={(slug) => `/writings/${slug}`}
+              />
+            </SectionCard>
+
+            <SectionCard
+              planet={planets.teardowns.name}
+              title={planets.teardowns.title}
+              oneLiner="Structured critiques of real products — what works, what breaks, and what I would try next."
+              href={planets.teardowns.href}
+              planetVariant="teardown"
+            >
+              <PlanetLinkList
+                featured={teardown.featured}
+                rest={teardown.rest}
+                hrefOf={(slug) => `/teardowns/${slug}`}
+              />
+            </SectionCard>
+          </div>
+        </section>
       </Container>
     </div>
   );

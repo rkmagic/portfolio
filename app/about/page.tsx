@@ -12,7 +12,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Product manager focused on 0-to-1 AI-native products, OEM partnerships, and regulated multi-market launches.",
+    "I build consumer mobile and AI-native products and can thrive in messy environments: partner-led distribution, many markets, and privacy rules that change at every border.",
 };
 
 export default function AboutPage() {
@@ -25,18 +25,20 @@ export default function AboutPage() {
       </h1>
       <div className="mt-8 space-y-6 text-lg leading-relaxed text-[var(--text-primary)]">
         <p>
-          I love building 0-to-1 products particularly AI-native ones where the
-          challenges are multifold — competing stakeholders, complex partner
-          ecosystems, and legal constraints that vary by market.
+          I build consumer mobile and AI-native products and can thrive in messy
+          environments: partner-led distribution, many markets, and privacy rules
+          that change at every border.
         </p>
         <p>
-          Most recently at InMobi-Glance, I owned mobile content experiences
-          reaching 200K+ daily users across North America, Latin America, and
-          Asia — distributed through OEM partnerships with Motorola and Verizon
-          in a B2B2C model. The real challenge was shipping across OEM release
-          cycles, multi-jurisdiction compliance (CCPA, COPPA, GDPR), and
-          stakeholders who each had a different definition of success. An
-          environment I&apos;m most comfortable in.
+          I spent 3+ years in product at InMobi, moving from business analytics
+          into APM and then PM roles. As PM, I owned a content discovery app with
+          ~200K daily users distributed through Verizon, and grew its revenue 70%
+          by rethinking how it was deployed (app vs web vs TWA) and tuning
+          engagement and programmatic monetization (without hurting the user experience). Before
+          that, as APM, I led a news and gaming app with 600K daily users on
+          Motorola devices: 4x revenue, 30% engagement gains, and a real-time US
+          election feature built with the Associated Press that lifted daily
+          users by 20%.
         </p>
       </div>
       <section className="mt-10" aria-labelledby="expertise-heading">
@@ -44,60 +46,66 @@ export default function AboutPage() {
           id="expertise-heading"
           className="font-[family-name:var(--font-outfit)] text-xl font-semibold text-[var(--text-primary)]"
         >
-          I specialize in
+          What I bring
         </h2>
         <ul className="mt-4 list-disc space-y-3 pl-6 text-lg leading-relaxed text-[var(--text-primary)]">
           <li>
-            <strong className="font-semibold">
-              0→1 mobile and digital product development
-            </strong>{" "}
-            — from rough problem to shipped product
+            <strong className="font-semibold">0→1 mobile products.</strong> Lock
+            screen experiences, widgets, and content apps (android and web), from rough problem to
+            shipped product.
+          </li>
+          <li>
+            <strong className="font-semibold">Partner-driven GTM.</strong>{" "}
+            B2B2C models where the end user isn&apos;t your direct customer. I
+            owned revenue, projections, and weekly reporting across three telco
+            and OEM partners.
           </li>
           <li>
             <strong className="font-semibold">
-              Partner-driven GTM and relations
+              Programmatic monetization.
             </strong>{" "}
-            — B2B2C models where the end user isn&apos;t your direct customer.
-            Owning revenue, projections and directly working with B2B partners.
+            Ad SDK integrations and optimizing eCPMs and CTRs without degrading
+            the experience.
           </li>
           <li>
-            <strong className="font-semibold">Programmatic monetization</strong>{" "}
-            — content, advertising, and engagement mechanics
+            <strong className="font-semibold">
+              Privacy-regulated products.
+            </strong>{" "}
+            CCPA, COPPA, and GDPR compliance across markets.
           </li>
           <li>
-            <strong className="font-semibold">Regulated environments</strong> —{" "}
-            privacy compliance across US, LATAM, and EU frameworks
-          </li>
-          <li>
-            <strong className="font-semibold">AI-native</strong> — I&apos;ve
-            built LLM-powered content tools and multimodal prototypes, and
-            I&apos;m very particular about how AI creates real user value vs
-            noise. I&apos;ve strengthened my AI knowledge by continuous
-            research, building agents, doing workshops with my MBA cohort and
-            attending events, workshops, webinars and more since 2024.
+            <strong className="font-semibold">AI-native products.</strong> I
+            shipped AI-driven MVPs at InMobi (calorie tracking, mindfulness, quiz
+            content) and have been building with LLMs since 2024. I care most
+            about the gap between an AI demo and AI that users actually value;
+            Fintrack&apos;s model evaluation shows how I test for it.
           </li>
         </ul>
       </section>
-      <div className="mt-10 space-y-6 text-lg leading-relaxed text-[var(--text-primary)]">
-        <p>
-          Currently completing my MBA at IE Business School in Madrid, with a
-          specialization in Digital Business and Analytics. I&apos;m doing my
-          exchange semester in ESMT Berlin.
-        </p>
-        <p>
-          Open to Product Manager, AI Product Manager, Product Owner, and
-          product-adjacent roles across EMEA — Media/Streaming/Commerce,
-          fintech, healthtech, enterprise SaaS, and AI-native products.
-        </p>
-        <p>
-          Outside work, I&apos;m a huge sports fan. I follow football, F1,
-          tennis and cricket. Manchester United and Ferrari are my favorite
-          teams. I&apos;m also a history buff so I enjoy learning about history
-          and it fascinates me whenever I visit historic places. I play chess
-          occasionally and like to see movies (select TV shows). Geopolitics is
-          something I can talk about with anyone.
-        </p>
-      </div>
+      <section className="mt-10" aria-labelledby="now-heading">
+        <h2
+          id="now-heading"
+          className="font-[family-name:var(--font-outfit)] text-xl font-semibold text-[var(--text-primary)]"
+        >
+          Now
+        </h2>
+        <div className="mt-4 space-y-6 text-lg leading-relaxed text-[var(--text-primary)]">
+          <p>
+            Completing my MBA at IE Business School (Digital Business and
+            Analytics), currently on exchange at ESMT Berlin. Graduating December
+            2026.
+          </p>
+          <p>
+            I&apos;m looking for PM and AI PM roles across EMEA in consumer
+            mobile, media and streaming, and AI-native products, especially where
+            partners, monetization, or regulation make the problem harder.
+          </p>
+          <p>
+            Outside work: football (Manchester United), F1 (Ferrari), history,
+            chess, and geopolitics.
+          </p>
+        </div>
+      </section>
       {highlights.length > 0 ? (
         <section className="mt-10" aria-labelledby="highlights-heading">
           <h2

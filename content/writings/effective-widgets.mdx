@@ -1,6 +1,6 @@
 ---
 title: "How to build an effective widget for your app"
-description: "Product learnings from building android widgets."
+description: "Product learnings from building Android widgets."
 date: "2026-02-20"
 kind: article
 ---
@@ -17,9 +17,9 @@ It is hard to get users to add widgets unless they come preloaded on the device,
 
 - **Stay small unless necessary.** A widget that tries to be a mini-app can backfire. Smaller footprints are easier to tolerate. The larger the widget, the more friction there is to place it, since it takes up more space, so the function must justify the size. Phones also handle widget grids differently, such as 4x4 or 3x4, so design for those constraints and avoid wasted space.
 
-- **Give it its own interaction model.** A widget that only displays information is underused unless it serves a utility case like a calendar. Widgets with controls such as refresh, next/previous, or a settings shortcut treat the widget as a real surface, not a shrunk screenshot of the app. 
+- **Give it its own interaction model.** A widget that only displays information is underused unless it serves a utility case like a calendar. Widgets with controls such as refresh, next/previous, or a settings shortcut treat the widget as a real surface, not a shrunk screenshot of the app.
 
-- **One tap, one destination.** Ambiguity is the enemy on a surface this small. A tap should lead to one clear destination, with no "which of these three things did you mean" moment after the user lands. On one widget we shipped, moving from multiple content pieces to a single piece at a time, similar to a flipboard, which raised widget clicks by 40%.
+- **One tap, one destination.** Ambiguity is the enemy on a surface this small. A tap should lead to one clear destination, with no "which of these three things did you mean" moment after the user lands. On one widget we shipped, moving from multiple content pieces to a single piece at a time — similar to a flipboard — raised widget clicks by 40%.
 
 - **Brand it as its own asset, not a scaled-down icon.** Widget imagery, the Android add prompt, and the widget's visual identity need their own design pass. They do not inherit well from the app icon or splash screen.
 

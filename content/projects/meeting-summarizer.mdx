@@ -20,7 +20,7 @@ The real job was not "call an API." It was: drop in several messy audio files, w
 
 ## Process
 
-I scoped it as a local Node app first: upload UI, Whisper on the server, and text to review in the browser. FFmpeg was the non-negotiable dependency for anything over the size limit: `ffprobe` for duration, `ffmpeg` to split with stream copy so I was not re-encoding hour-long files. It took some iteration to get FFmpeg working correctly on the server. When I make enough money, I'm going to do a donation FFmpeg for sure.
+I scoped it as a local Node app first: upload UI, Whisper on the server, and text to review in the browser. FFmpeg was the non-negotiable dependency for anything over the size limit: `ffprobe` for duration, `ffmpeg` to split with stream copy so I was not re-encoding hour-long files. It took some iteration to get FFmpeg working correctly on the server. When I make enough money, I'm going to donate to FFmpeg for sure.
 
 Once that worked, I automated dropping recordings from my phone into the Node app.
 
@@ -40,7 +40,7 @@ The n8n workflow is simple. A timer wakes the Render server when it has gone to 
 
 I can now transcribe long recordings for a few cents ($0.006/minute) without paying monthly SaaS subscriptions.
 
-It also feeds product discovery: I turn conversations into notes classified into insights, action items, key points, and open questions. 
+It also feeds product discovery: I turn conversations into notes classified into insights, action items, key points, and open questions.
 
 ## Future Work
 

@@ -27,12 +27,28 @@ const securityHeaders = [
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
 ];
 
+/** Chrome’s PDF viewer fails (grey sad-face) when the PDF response itself
+ *  carries X-Frame-Options / object-src 'none'. Keep PDFs embeddable. */
+const staticPdfHeaders = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+];
+
 const nextConfig: NextConfig = {
   transpilePackages: ["next-mdx-remote"],
   async headers() {
     return [
       {
-        source: "/:path*",
+        source: "/pdfs/:path*",
+        headers: staticPdfHeaders,
+      },
+      {
+        source: "/highlights/:path*.pdf",
+        headers: staticPdfHeaders,
+      },
+      {
+        // Apply page CSP everywhere except static PDF assets
+        source: "/((?!pdfs/|highlights/).*)",
         headers: securityHeaders,
       },
     ];
