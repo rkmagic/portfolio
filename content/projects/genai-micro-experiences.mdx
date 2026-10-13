@@ -1,0 +1,71 @@
+---
+title: "Testing GenAI micro-experiences"
+description: "Shipping GenAI micro-experiences to the lock screen in five weeks, and why the opt-in step mattered more than the click-through rate."
+date: "2024-12-31"
+company: "Product"
+outcome: "1–1.5% tile CTR, and opt-in fell short of our bar. The real drop-off came after users had tried the experience."
+coverImage: "/images/genai-exp.png"
+---
+
+**Problem:** Could small GenAI experiences turn passive lock screen viewers in niche segments into engaged users?
+
+**Decision:** Build fast on web, push to the lock screen, and iterate on what users engaged with.
+
+**Result:** 1–1.5% click-through on the tiles, and opt-in fell short of our bar among users who tried an experience. Too few users opted in for us to learn whether the experiences themselves worked.
+
+![Sample mock-up](/images/genai-exp.png)
+
+- **Role:** Product Manager, owning two of the experiences (the numbers on this page are for these two):
+  - **Calorie tracker:** upload a photo of your meal and get its calories, broken down into carbs, protein and fat.
+  - **Mindfulness:** choose a goal (sleep, relax or energize) and get a 3–4 minute guided audio session, scripted by Gemini and voiced with ElevenLabs.
+- **Timeline:** 5 weeks, December 2024
+
+## Context
+
+A lock screen content platform preloaded on Android phones through OEM partners. Users see the lock screen many times a day, but each look lasts seconds and isn't intentional. Nobody unlocks their phone to look at the lock screen. The content was broad (news, entertainment, games), so for users whose interests fell outside those categories, the lock screen had little to offer.
+
+## The problem
+
+Broad content gets broad, shallow engagement. Our hypothesis was that specific segments would engage more with small, useful experiences built for them: parents at bedtime, people tracking what they eat, people who want a calm minute, and TV fans following the latest shows. GenAI made these cheap to produce: bedtime stories, mindfulness sessions, recipes, a calorie tracker and more. It would also let us learn users' preferences and feed them into personalization.
+
+## Options
+
+1. **Research first.** Interview or survey each segment, or show lock screen nudges that collect preferences ("Do you track calories?", "Are you into TV shows?"), then build for the segments that respond. Slower, but it would tell us who wanted what, and when.
+2. **Build and ship fast.** Build on web, deliver to the lock screen, and iterate on what performs. The success bar was simple: if at least x% of users who tried an experience opted in, we'd build deeper experiences on top.
+
+## Decision and trade-off
+
+We chose option 2. Web meant no app release cycle, so we could update experiences the same day.
+
+**What we gave up:** deep discovery. We had general research on the kinds of content users were interested in, but we didn't know which users wanted which experience, or at what moment of the day. We picked use cases we thought were promising and went ahead.
+
+**Technical trade-offs:**
+
+- **Calorie tracker: accuracy over cost.** To cut cost, we first cached Gemini's results aggressively, reusing the calorie breakdown for meals that looked alike. Error rates went up, so we dialled caching back. In an experiment, wrong calorie counts would have told us nothing about whether users wanted the feature, so accuracy was worth the extra cost.
+- **Mindfulness: freshness over cost.** We could have pre-generated a library of sessions, which would have been cheaper and faster to load. Instead we generated each session in real time, with some randomness, to test whether a new session every time would keep people coming back.
+
+{/* ![A micro-experience tile on the lock screen](/images/case-studies/lockscreen-tile.png) */}
+
+## Outcome
+
+Click-through on the tiles was **1–1.5%**. That was on a limited number of impressions. New tiles get a novelty bump, so we'd expect CTR to fall at scale, not rise.
+
+The funnel:
+
+**Tile seen → tile tapped → tried the experience → opted in → came back** (opting in meant the tile appeared more often)
+
+The bigger drop came after the tap: opt-in among users who tried an experience fell short of our 50% bar. We showed the opt-in only after the experience, so we were asking people who had seen the value, but anyone who left partway never saw the ask at all. That ordering added a drop-off of its own.
+
+Our hypotheses for the low opt-in:
+
+1. **Accidental or curiosity taps.** The tile was new, and users didn't expect it on their lock screen.
+2. **Low trust** in a feature that appeared without explanation.
+3. **The experience didn't meet expectations.**
+4. **Users already had apps** that did the same job.
+
+We didn't separate these at the time. Time spent before leaving would have: a bounce within seconds points to accidental taps, while a full session with no opt-in points to trust or existing apps.
+
+## What I learned
+
+- **Test the riskiest assumption first.** Ours was "will anyone notice this and want it on their lock screen?" A quick test, even without user research, would have been a fake-door tile, which could have answered that before we built anything. We could also have promoted the experiences inside news and games, where users were already engaged, instead of starting cold on the lock screen.
+- **On a surface without intent, trust has to come first.** Users won't tap a tile, or let it stay on their lock screen, unless they understand why it's there. A simple "Why am I seeing this?" would have helped.

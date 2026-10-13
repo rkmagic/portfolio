@@ -41,9 +41,9 @@ export const featuredConfig: readonly FeaturedConfigEntry[] = [
     coverImage: "/images/featured/dazn.jpg",
   },
   {
-    kind: "writing",
-    slug: "effective-widgets",
-    coverImage: "/images/featured/widgets.png",
+    kind: "project",
+    slug: "genai-micro-experiences",
+    coverImage: "/images/genai-exp.png",
   },
 ] as const;
 
