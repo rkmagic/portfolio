@@ -12,7 +12,7 @@ function resolveSiteUrl() {
 
 export const site = {
   name: "Rishi",
-  title: "Rishi — Product Manager",
+  title: "Rishi, Product Manager",
   tagline: "Product Manager | Consumer Mobile Products | AI-Native",
   headline: "I think by building.",
   description:

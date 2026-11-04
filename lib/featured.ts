@@ -32,8 +32,8 @@ export const featuredKindLabels: Record<FeaturedKind, string> = {
 export const featuredConfig: readonly FeaturedConfigEntry[] = [
   {
     kind: "project",
-    slug: "spend-management",
-    coverImage: "/images/featured/fintrack.png",
+    slug: "genai-micro-experiences",
+    coverImage: "/images/genai-exp.png",
   },
   {
     kind: "teardown",
@@ -42,8 +42,8 @@ export const featuredConfig: readonly FeaturedConfigEntry[] = [
   },
   {
     kind: "project",
-    slug: "genai-micro-experiences",
-    coverImage: "/images/genai-exp.png",
+    slug: "spend-management",
+    coverImage: "/images/featured/fintrack.png",
   },
 ] as const;
 

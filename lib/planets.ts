@@ -13,18 +13,21 @@ export const planets = {
     name: "Planet Teardown",
     title: "Product teardowns",
     href: "/teardowns",
+    homeAnchor: "teardown",
     backLabel: "Back to Planet Teardown",
   },
   projects: {
     name: "Planet Shipyard",
     title: "Product projects",
     href: "/projects",
+    homeAnchor: "shipyard",
     backLabel: "Back to Planet Shipyard",
   },
   writings: {
     name: "Planet Archive",
     title: "Writings",
     href: "/writings",
+    homeAnchor: "archive",
     backLabel: "Back to Planet Archive",
   },
 } as const;

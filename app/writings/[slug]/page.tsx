@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ContentLayout } from "@/components/content-layout";
 import { LazyPdfEmbed } from "@/components/lazy-pdf-embed";
 import { getWriting, getWritingSlugs } from "@/lib/content/load";
+import { getNeighbors, writingRows } from "@/lib/content/rows";
 import { site } from "@/lib/site";
 import { planets } from "@/lib/planets";
 
@@ -56,8 +57,9 @@ export default async function WritingPage({ params }: Props) {
       title={meta.title}
       description={meta.description}
       readingTime={readingTime}
-      backHref={planets.writings.href}
+      backHref={`/#${planets.writings.homeAnchor}`}
       backLabel={planets.writings.backLabel}
+      prevNext={getNeighbors(writingRows(), slug)}
     >
       {content}
 

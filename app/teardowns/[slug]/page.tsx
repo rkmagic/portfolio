@@ -5,6 +5,7 @@ import {
   getTeardown,
   getTeardownSlugs,
 } from "@/lib/content/load";
+import { getNeighbors, teardownRows } from "@/lib/content/rows";
 import { site } from "@/lib/site";
 import { planets } from "@/lib/planets";
 
@@ -54,8 +55,9 @@ export default async function TeardownPage({ params }: Props) {
       title={meta.title}
       description={meta.description}
       readingTime={readingTime}
-      backHref={planets.teardowns.href}
+      backHref={`/#${planets.teardowns.homeAnchor}`}
       backLabel={planets.teardowns.backLabel}
+      prevNext={getNeighbors(teardownRows(), slug)}
     >
       {content}
     </ContentLayout>

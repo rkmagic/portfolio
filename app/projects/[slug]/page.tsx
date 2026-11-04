@@ -6,6 +6,7 @@ import {
   getProject,
   getProjectSlugs,
 } from "@/lib/content/load";
+import { getNeighbors, projectRows } from "@/lib/content/rows";
 import { site } from "@/lib/site";
 import { planets } from "@/lib/planets";
 
@@ -55,8 +56,9 @@ export default async function ProjectPage({ params }: Props) {
       title={meta.title}
       description={meta.description}
       readingTime={readingTime}
-      backHref={planets.projects.href}
+      backHref={`/#${planets.projects.homeAnchor}`}
       backLabel={planets.projects.backLabel}
+      prevNext={getNeighbors(projectRows(), slug)}
     >
       {content}
 
