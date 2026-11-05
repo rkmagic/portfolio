@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 
 export type JumpSection = { id: string; label: string; count: number };
 
+/** Pixels from viewport top where the section under the sticky jump bar “counts”. */
+const ACTIVE_MARKER_PX = 140;
+
 export function SectionJumpBar({ sections }: { sections: JumpSection[] }) {
-  const [active, setActive] = useState<string | null>(null);
+  const [active, setActive] = useState<string | null>(sections[0]?.id ?? null);
 
   useEffect(() => {
     const elements = sections
@@ -13,20 +16,27 @@ export function SectionJumpBar({ sections }: { sections: JumpSection[] }) {
       .filter((el): el is HTMLElement => Boolean(el));
     if (elements.length === 0) return;
 
-    const visible = new Map<string, boolean>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          visible.set(entry.target.id, entry.isIntersecting);
+    const update = () => {
+      // Last section whose top has crossed the sticky band wins — so a tall
+      // Archive above Teardown does not keep stealing the active state.
+      let current = sections[0]?.id ?? null;
+      for (const el of elements) {
+        if (el.getBoundingClientRect().top <= ACTIVE_MARKER_PX) {
+          current = el.id;
+        } else {
+          break;
         }
-        const first = sections.find((s) => visible.get(s.id));
-        setActive(first ? first.id : null);
-      },
-      // Band just below the sticky header + jump bar.
-      { rootMargin: "-130px 0px -55% 0px" },
-    );
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+      }
+      setActive(current);
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
   }, [sections]);
 
   return (
@@ -42,6 +52,7 @@ export function SectionJumpBar({ sections }: { sections: JumpSection[] }) {
               <a
                 href={`#${s.id}`}
                 aria-current={isActive ? "location" : undefined}
+                onClick={() => setActive(s.id)}
                 className={`inline-flex min-h-[36px] items-center gap-2 rounded-full border px-3 font-[family-name:var(--font-mono)] text-xs uppercase tracking-wide transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--star-yellow)] ${
                   isActive
                     ? "border-[var(--star-yellow)] text-[var(--star-yellow)]"

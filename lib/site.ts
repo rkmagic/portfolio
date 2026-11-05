@@ -16,7 +16,7 @@ export const site = {
   tagline: "Product Manager | Consumer Mobile Products | AI-Native",
   headline: "I think by building.",
   description:
-    "When I'm not sure, I build the smallest version and let it answer. Every artefact below shows what I tried, what broke, and what I kept.",
+    "When I'm not sure, I build the smallest version and let it answer. Below are some pieces of work and proof of how I think.",
   url: resolveSiteUrl(),
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "rishikashyap.work@gmail.com",
   linkedInUrl:
