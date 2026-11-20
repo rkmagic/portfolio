@@ -1,0 +1,96 @@
+---
+title: "Tanaw: hiring OS for PH → EU workers"
+description: "Acting CTO on a multi-sided platform that turns paper-heavy international hiring into one workflow for workers, agencies, and employers."
+date: "2026-11-18"
+company: "Tanaw"
+outcome: "Shipped a bilingual chat-first intake, document verification flow, and role-based dashboards for candidates, agencies, employers, and admins."
+coverImage: "/images/tanaw-hero.jpg"
+---
+
+**Problem:** Blue-collar hiring from the Philippines into Europe still runs on forms, email, and incomplete files, so workers stall and agencies waste weeks chasing documents.
+
+**Decision:** Build the operating system for that journey: chat intake, guided documents, and separate products for each side of the marketplace on one data model.
+
+**Result:** A production-shaped platform with marketing, job-seeker onboarding, candidate docs, and agency / employer / admin review, live at [tanaw-ai.lovable.app](https://tanaw-ai.lovable.app/), source at [rkmagic/tanaw](https://github.com/rkmagic/tanaw).
+
+![Tanaw marketing hero](/images/tanaw-hero.jpg)
+
+- **Role:** Acting CTO: product direction, sequencing, and how the system holds together
+- **Live:** [tanaw-ai.lovable.app](https://tanaw-ai.lovable.app/)
+- **Repo:** [rkmagic/tanaw](https://github.com/rkmagic/tanaw)
+
+## Context
+
+International hiring for skilled trades and service work is still mostly a paper process. Workers need IDs, resumes, medicals, and certificates in the exact form agencies and European employers accept. Openings exist, but matching is informal. Visa and compliance steps sit outside the hiring flow, so candidates stall after they are "selected."
+
+Agencies and employers inherit that mess: incomplete files, unclear status, and weeks of back-and-forth before anyone can start.
+
+We first shipped a working product on [Lovable](https://tanaw-ai.lovable.app/) to prove the flows with real UI. I then migrated the entire stack off Lovable onto our own infrastructure so we owned auth, data, files, and deploy, not a prototype locked to a builder.
+
+## The problem
+
+Three jobs fail at once:
+
+1. **Documents.** Workers do not know what "ready" looks like for a European employer.
+2. **Match.** They cannot see which roles they actually qualify for.
+3. **Immigration.** Compliance lives in another channel, so momentum dies after selection.
+
+A single dashboard with a role flag would not fix that. Worker intake, agency verification, and employer pipeline are different products that must share one source of truth.
+
+### Persona
+
+The primary user is a skilled worker in the Philippines preparing to take a trade or service role in Europe. English may be strong enough for work, but forms, visa language, and document checklists are where people get stuck. They will abandon a 20-field form. They will finish a conversation that asks one clear question at a time, in English or Tagalog.
+
+Agencies are the second user: they need document status, not another spreadsheet of half-complete profiles.
+
+## Product principles
+
+1. **Start from the worker constraint.** Forms fail this audience. Intake is a chat. Language is English and Tagalog from day one: usable, not just translated.
+2. **Treat documents as the product.** Uploads, verification status, and agency review are first-class, not an afterthought on a profile page.
+3. **Ship a real multi-sided system.** Candidate, agency, employer, and admin are different surfaces on the same data model.
+4. **Separate concerns for production.** Identity, structured data, and sensitive files do not share one blob store. Secrets stay out of the app.
+5. **Prototype fast, then own the stack.** Lovable got us to a clickable product quickly. The migration to a custom stack was the point where Tanaw became ours to operate and extend.
+
+## What we built
+
+- **Marketing site:** positioning for workers and European employers
+- **Job-seeker chat onboarding:** collect work history and intent through conversation, then create an account
+- **Candidate dashboard:** profile and document submission with agency follow-up
+- **Agency / employer / admin dashboards:** review candidates, documents, and roles
+- **Public profile:** shareable candidate view
+
+If document readiness, role fit, and immigration steps live in one workflow, time-to-hire drops and fewer candidates fall out of the process.
+
+## Process
+
+I sequenced for the riskiest assumption first: will workers complete intake if it feels like a form? Chat onboarding came before polishing employer analytics.
+
+**Phase 1: Lovable.** We built the full product surfaces in Lovable to validate positioning, bilingual flows, and the multi-sided IA without waiting on infrastructure. That demo is still the public live link: [tanaw-ai.lovable.app](https://tanaw-ai.lovable.app/).
+
+**Phase 2: custom stack.** I migrated everything onto our own stack so production concerns were first-class: Firebase Auth for identity, PostgreSQL for profiles and roles, Cloud Storage for sensitive files, Cloud Run for the API. Frontend is React, TypeScript, Vite, Tailwind, and shadcn/ui. Hosting is Firebase Hosting for the web app and Cloud Run for the API.
+
+Documents were designed as a state machine agencies can act on (submitted → in review → verified / needs changes), not a file list. That forced the API and storage model during the migration, not as a later cleanup.
+
+## Outcome
+
+What shipped is a working multi-sided skeleton of the hiring journey, not a slide deck:
+
+- Bilingual conversational intake instead of a long form
+- Guided document collection for ID, resume, medical, and credentials
+- Shared candidate profiles with document status for agencies
+- Separate dashboards for employer and admin pipeline views
+- A full exit from Lovable onto infrastructure we control
+
+The [source-available snapshot](https://github.com/rkmagic/tanaw) is published for portfolio review. It is not a license to redeploy the production service.
+
+## What I learned
+
+- **Multi-sided products fail when you build one UI and flip a flag.** Each side needs its own job-to-be-done; the shared asset is the data model and document states.
+- **For this audience, language and interaction pattern are product, not polish.** Chat + Tagalog was a launch requirement, not a later localization pass.
+- **Builders are for speed; ownership is for scale.** Lovable was the right way to get a real UI in front of stakeholders. Migrating off it was the right way to make Tanaw operable: auth, files, roles, and secrets under our control.
+- **Acting CTO means sequencing under constraint.** Prove the product shape first, then invest in the stack that can hold production load.
+
+## Supporting links
+
+- Live product: [tanaw-ai.lovable.app](https://tanaw-ai.lovable.app/)
+- Source snapshot: [github.com/rkmagic/tanaw](https://github.com/rkmagic/tanaw)

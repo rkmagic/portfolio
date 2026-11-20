@@ -1,0 +1,140 @@
+---
+title: "Calendar scheduling agent"
+description: "Telegram agent that reads three calendars, finds real free slots, and books meetings only after you confirm."
+date: "2026-11-20"
+company: "Personal, ESMT AI in Practice"
+outcome: "Shipped an n8n agent on Claude Haiku that merges Gmail, Outlook, and class feeds, proposes slots, and writes to Google Calendar only after explicit confirmation."
+coverImage: "/images/calendar-agent.png"
+---
+
+**Problem:** My week lived in three calendars that did not talk to each other: personal Gmail, school Outlook, and the ESMT class feed (My MBA exchange school). Finding a free slot meant opening all three, cross-checking by eye, then booking by hand.
+
+**Decision:** Build a Telegram agent where the model decides and code computes. Claude Haiku picks tools; a deterministic `get_schedule` workflow does the interval math and returns free slots. Writes never run without my yes.
+
+**Result:** From one chat message I can ask for tomorrow’s schedule, block time for pitch practice, or move and delete events, with the agent surfacing incomplete calendar data instead of guessing.
+
+![Merged calendar view across personal, class, and Outlook feeds](/images/calendar-agent.png)
+
+- **Role:** Product and systems design: agent pattern, failure modes, and human oversight
+- **Stack:** n8n, Claude Haiku 5.5, Google Calendar, Telegram, iCal feeds
+- **Course:** ESMT AI in Practice (Project Shipyard)
+- **Demo:** [Loom walkthrough](https://www.loom.com/share/6fe14a47e2d14b3787ad454cd88974cd)
+
+## Context
+
+Three to five times a week I need time for group work, a networking chat, or a focus block. Each request took 2-3 minutes, longer with guests, because I had to reconcile three sources that disagree about what “busy” means.
+
+The ESMT feed lists every careers talk and panel, not only my lectures. A naive overlay makes most evenings look full when they are not. Subscribing both iCal links into Google Calendar solves *seeing* everything in one place. It does not solve knowing which events really block me, turning a free gap into a meeting with guests, or deciding what to move when nothing fits.
+
+That is the job the agent does from Telegram in under a minute.
+
+## The pattern
+
+One rule: **the model decides, code computes.**
+
+Claude Haiku 5.5 with adaptive thinking reads the message, chooses a time window, and calls tools. The hard arithmetic lives in a deterministic sub-workflow, `get_schedule`. It downloads all three calendars, expands repeating classes, applies skipped and moved sessions, converts Outlook’s Windows time-zone names, merges everything, and returns free slots on a 15-minute grid.
+
+Four write tools sit beside it, all limited to my Gmail calendar:
+
+1. Block time
+2. Schedule a meeting
+3. Move an event
+4. Delete an event
+
+Telegram is the interface, polled every minute with a long-poll so nothing on my laptop is exposed to the internet. In the demo, three workflows run together: one to fetch calendar data, one that connects Telegram to the agent and its tools, and a reply path back to chat.
+
+I rejected three simpler options:
+
+- A **fixed workflow** (form in, slots out) cannot handle open requests like “45 minutes with Ana, mornings, not Friday,” or the follow-up “book the second one.”
+- A **plain chatbot** that reads raw calendars was the riskiest path. Language models are unreliable at interval arithmetic and iCal repeat rules. A slot that is “mostly right” means a double booking.
+- **Multi-agent** would have added cost and failure points without benefit. One domain and five tools do not need a planner and specialists.
+
+Offloading the arithmetic is also why a small, fast model is enough. Haiku only has to understand the request and pick tools, not compute free time.
+
+## Demo walkthrough
+
+On a live run, the phone showed the merged view of personal, class, and Outlook calendars for the next day while the agent ran on Telegram. Full recording: [Loom demo](https://www.loom.com/share/6fe14a47e2d14b3787ad454cd88974cd).
+
+1. An off-topic question (“Who is the president of the UK?”): the agent should refuse and stay in schedule scope.
+2. “What is my schedule tomorrow?”: it looked up across the three calendars and replied with the day that matched the phone.
+3. “Can you book a slot from 12:30-1 PM for a pitch practice?”: while booking, one calendar failed. The agent said so: incomplete view, go fix it or check manually. That honesty mattered more than a clean happy path.
+4. It proposed the block with full details and waited. No write without confirmation.
+5. After “yes,” it used the Google Calendar tool. The event appeared on the phone for 12:30-1:00.
+
+The n8n graph itself was built with Claude via an MCP connector and ran locally. Executions and step logs made it obvious which workflow was running when something stalled.
+
+## Two failure modes worth keeping
+
+### 1. Correct data, wrong meaning
+
+The first run against real calendars over-blocked evenings. Thursday 18:30-20:00 looked busy because of a “panel on stakeholder capitalism.” The ESMT feed is every school event, not my timetable. Over a month that would have starved the agent of evening slots for events I never planned to attend.
+
+The signal was in the data: every entry’s description starts with a type: Lecture, Exam Blocker, Careers Event, Public event. Now only lectures and exams block time. Everything else returns as optional; the agent mentions it only if a proposed slot overlaps. Careers events I actually registered for still show as busy in Outlook, so those still block.
+
+Integration bugs are often semantic, not technical. The pipeline ran green the whole time.
+
+### 2. Partial data that looks complete
+
+The school Outlook feed failed at random. Microsoft returns IPv4 and IPv6 in varying order; my network cannot reach IPv6, so each request was a coin flip. A related silent failure came from renaming a node: the merge step finds sources by name, so Gmail events were briefly labelled read-only and the agent could no longer move them.
+
+Both risk the worst outcome for a scheduler: telling me I am free when I am not. Mitigation: each source fails independently and reports `sourceErrors`, so the agent says “Outlook could not be read, this may be incomplete” rather than guessing. Forcing IPv4 first is still constrained by org rules, so Outlook remains the unreliable layer, and the product has to say so out loud.
+
+## How I would evaluate it
+
+Because the system splits into a deterministic part and a model part, the evals split too.
+
+**Calendar engine: exact tests.** Fixed iCal fixtures covering weekly repeats, skipped and moved sessions, time-zone changes, all-day and multi-day events, each with known free slots. Every code change must pass them.
+
+**Agent: checks from n8n logs.** Every run records the message, tool calls with inputs, tool outputs, and the reply. From that, four automatic measures:
+
+| Metric | Target |
+| --- | --- |
+| Slot validity (recompute proposed slots against all calendars) | 100% |
+| Confirmation compliance (no write unless previous message is an explicit yes) | 100%, one violation is an incident |
+| Window coverage (`get_schedule` range matches the ask) | High |
+| Honesty under failure (reply mentions `sourceErrors` when present) | Required |
+
+A set of ~50 realistic requests with expected behaviour (“3 hours on Monday” should trigger move suggestions; “move my Gravity session” should refuse and draft a message), re-run after every prompt or model change.
+
+## Oversight
+
+The agent reads freely but writes only with permission. Every block, booking, move, or delete is stated in full (title, day, time, guests) and runs only after I reply “yes.” Reading is low-risk. Writing touches other people: invites and cancellations go to their inboxes.
+
+The honest weakness: that confirmation lives in the agent’s instructions, not in the workflow. Nothing structurally stops a write tool if the model misreads a message. The proper fix is an n8n approval gate that pauses until I tap Approve. That needs a URL reachable from my phone, which a laptop-hosted instance is not.
+
+Other controls already in place:
+
+- Writes limited to one calendar (Gmail)
+- Only my Telegram chat ID accepted
+- Deleted events recoverable in Google’s Bin for 30 days
+- Read-only calendars: suggest moves, never auto-move lectures; draft messages to organisers instead of sending
+- Full audit trail of tool calls per run
+
+If this went beyond personal use, the structural approval gate would stop being optional.
+
+## Outcome
+
+What shipped is a working personal scheduler, not a slide:
+
+- Three calendars merged into one schedule view the agent can query
+- Free slots computed deterministically, not hallucinated by the model
+- Block, schedule, move, and delete on Gmail, always behind confirmation
+- Explicit failure reporting when a feed is down
+- Demo-proven path from Telegram question to calendar event on the phone
+
+Weekly scheduling time drops from roughly 10-15 minutes to under 5. The case grows at work, where meetings multiply, most carry guests, and the per-request saving compounds, especially if the same agent later attaches notes or follow-ups to the events it books.
+
+## What I learned
+
+- **Seeing calendars in one place is not the product.** Judging which events block, booking with guests, and handling partial failure is.
+- **Do not let the model do interval math.** Split decide vs compute, then you can use a small model and test the engine in isolation.
+- **Semantic integration failures look like success.** Green pipelines can still over-block your life if “busy” means the wrong thing.
+- **Honesty under incomplete data is a feature.** A scheduler that admits Outlook is down is safer than one that invents free time.
+- **Prompt-level confirmation is not enough for production.** Human oversight needs a hard gate when writes affect other people’s inboxes.
+
+## Supporting links
+
+- [Demo on Loom](https://www.loom.com/share/6fe14a47e2d14b3787ad454cd88974cd)
+- [n8n](https://n8n.io/)
+- [Google Calendar API](https://developers.google.com/calendar)
+- [Telegram Bots](https://core.telegram.org/bots)
