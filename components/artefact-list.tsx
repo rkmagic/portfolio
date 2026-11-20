@@ -69,36 +69,59 @@ export function ArtefactRow({
   summary,
   meta,
   badge,
+  image,
 }: Omit<ArtefactRowData, "slug">) {
   return (
     <Link
       href={href}
-      className={`group relative flex flex-col gap-1 rounded py-4 pl-4 pr-2 transition-colors hover:bg-[var(--card-hover)] sm:flex-row sm:items-baseline sm:gap-6 ${focusRing}`}
+      className={`group relative flex gap-3 rounded py-4 pl-4 pr-2 transition-colors hover:bg-[var(--card-hover)] sm:gap-5 ${focusRing}`}
     >
       <span
         className="pointer-events-none absolute bottom-3 left-0 top-3 w-0.5 origin-center scale-y-0 bg-[var(--star-yellow)] motion-safe:transition-transform motion-safe:duration-200 group-hover:scale-y-100 group-focus-visible:scale-y-100"
         aria-hidden="true"
       />
-      <span className="order-1 flex items-center gap-2 font-[family-name:var(--font-mono)] text-xs text-[var(--text-muted)] sm:order-2 sm:ml-auto sm:shrink-0">
-        {meta}
-        {badge ? (
-          <span className="rounded border border-[var(--card-border)] px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-[var(--star-yellow)]">
-            {badge}
+      {image ? (
+        <span className="relative h-16 w-24 shrink-0 overflow-hidden rounded border border-[var(--card-border)] bg-[var(--card-hover)] sm:h-20 sm:w-32">
+          {/* eslint-disable-next-line @next/next/no-img-element -- static public paths from content frontmatter */}
+          <img
+            src={image}
+            alt=""
+            className="h-full w-full object-cover object-top transition-transform duration-300 motion-safe:group-hover:scale-[1.03]"
+          />
+        </span>
+      ) : null}
+      <span className="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-6">
+        <span className="min-w-0 sm:flex-1">
+          <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="font-[family-name:var(--font-outfit)] text-base font-semibold text-[var(--text-primary)] sm:text-lg group-hover:text-[var(--star-yellow)] group-focus-visible:text-[var(--star-yellow)]">
+              {title}
+            </span>
+            <span
+              aria-hidden="true"
+              className="-translate-x-1 text-[var(--star-yellow)] opacity-0 motion-safe:transition-[opacity,transform] motion-safe:duration-200 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
+            >
+              →
+            </span>
           </span>
-        ) : null}
-      </span>
-      <span className="order-2 min-w-0 sm:order-1 sm:flex-1">
-        <span className="flex items-center gap-2 font-[family-name:var(--font-outfit)] text-lg font-semibold text-[var(--text-primary)] group-hover:text-[var(--star-yellow)] group-focus-visible:text-[var(--star-yellow)]">
-          {title}
-          <span
-            aria-hidden="true"
-            className="-translate-x-1 opacity-0 motion-safe:transition-[opacity,transform] motion-safe:duration-200 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
-          >
-            →
+          <span className="mt-1 flex flex-wrap items-center gap-2 font-[family-name:var(--font-mono)] text-xs text-[var(--text-muted)] sm:hidden">
+            {meta}
+            {badge ? (
+              <span className="rounded border border-[var(--card-border)] px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-[var(--star-yellow)]">
+                {badge}
+              </span>
+            ) : null}
+          </span>
+          <span className="mt-1 line-clamp-2 block text-sm text-[var(--text-muted)] sm:line-clamp-2">
+            {summary}
           </span>
         </span>
-        <span className="mt-1 line-clamp-2 block text-sm text-[var(--text-muted)] sm:line-clamp-1">
-          {summary}
+        <span className="hidden shrink-0 items-center gap-2 font-[family-name:var(--font-mono)] text-xs text-[var(--text-muted)] sm:ml-auto sm:flex">
+          {meta}
+          {badge ? (
+            <span className="rounded border border-[var(--card-border)] px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-[var(--star-yellow)]">
+              {badge}
+            </span>
+          ) : null}
         </span>
       </span>
     </Link>

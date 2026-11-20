@@ -14,6 +14,8 @@ export type ArtefactRowData = {
   summary: string;
   meta: string;
   badge?: string;
+  /** Optional thumbnail under public/ */
+  image?: string;
 };
 
 export function formatDate(date: string) {
@@ -37,6 +39,7 @@ function projectRow({ slug, meta }: Item<ProjectMeta>): ArtefactRowData {
     title: meta.title,
     summary: meta.outcome,
     meta: meta.company,
+    image: meta.coverImage,
   };
 }
 
@@ -48,6 +51,7 @@ function writingRow({ slug, meta }: Item<WritingMeta>): ArtefactRowData {
     summary: meta.description,
     meta: formatDate(meta.date),
     badge: meta.kind === "deck" ? "PDF" : undefined,
+    image: meta.coverImage,
   };
 }
 
@@ -58,6 +62,7 @@ function teardownRow({ slug, meta }: Item<TeardownMeta>): ArtefactRowData {
     title: meta.title,
     summary: meta.hook,
     meta: formatDate(meta.date),
+    image: meta.coverImage,
   };
 }
 

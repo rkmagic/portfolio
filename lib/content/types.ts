@@ -3,6 +3,8 @@ export type TeardownMeta = {
   description: string;
   date: string;
   hook: string;
+  /** Optional thumbnail under public/, e.g. /images/featured/dazn.jpg */
+  coverImage?: string;
 };
 
 export type ProjectMeta = {
@@ -28,4 +30,6 @@ export type WritingMeta = {
   kind: WritingKind;
   /** Required for kind: deck — path under public/, e.g. /pdfs/agents.pdf */
   pdfUrl?: string;
+  /** Optional thumbnail under public/, e.g. /images/writings/ai-workshops.png */
+  coverImage?: string;
 };
